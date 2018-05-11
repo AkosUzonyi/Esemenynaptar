@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Eseménynaptár</string>
+    <string name="no_events">Nincs esemény erre a napra</string>
+    
+    <string name="irodalom">Irodalom</string>
+    <string name="tortenelem">Történelem</string>
+  	<string name="zenetortenet">Zenetörténet</string>
+    <string name="vizualis_kultura">Vizuális kultúra</string>
+    
+    <string name="today">Ugrás a mai napra</string>
+    <string name="settings">Beállítások</string>
+    <string name="pick_date">Dátum módosítása</string>
+    <string name="set_notification_time">Értesítés időpontja...</string>
+    <string name="enable_notification">Napi értesítések</string>
+    
+</resources>
