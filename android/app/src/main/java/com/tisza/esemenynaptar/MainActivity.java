@@ -15,12 +15,14 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity implements OnPageChangeListener
 {
+	public static final int MILLIS_PER_DAY = 86400000;
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 	public static final String SHARED_PREF = "sp";
 	public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
 	public static final String NOTIFICATION_TIME = "notification_time";
 	public static final String TODAY_EXTRA = "today";
 	private static final String SAVED_DATE = "date";
+	private static final String SAVING_DAY = "savingdate";
 
 	private ViewPager pager;
 	private MyPagerAdapter pagerAdapter;
@@ -68,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements OnPageChangeListe
 		pagerAdapter = new MyPagerAdapter(this, pager, eventLoader);
 		pager.setAdapter(pagerAdapter);
 		Calendar calendar = Calendar.getInstance();
-		if (savedInstanceState != null)
+		long today = calendar.getTimeInMillis() / MILLIS_PER_DAY;
+		if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
 			calendar.setTimeInMillis(savedInstanceState.getLong(SAVED_DATE));
 		pagerAdapter.setDate(calendar);
 		
@@ -81,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnPageChangeListe
 	protected void onSaveInstanceState(Bundle bundle)
 	{
 		super.onSaveInstanceState(bundle);
+
+		Calendar now = Calendar.getInstance();
 		bundle.putLong(SAVED_DATE, pagerAdapter.getDate().getTimeInMillis());
+		bundle.putLong(SAVING_DAY, now.getTimeInMillis() / MILLIS_PER_DAY);
 	}
 	
 	@Override
