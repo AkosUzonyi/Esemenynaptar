@@ -1,8 +1,5 @@
 package com.tisza.esemenynaptar;
 
-import java.text.*;
-import java.util.*;
-import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.*;
@@ -13,7 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
 
-public class MainActivity extends ActionBarActivity implements OnPageChangeListener
+import java.text.*;
+import java.util.*;
+
+public class MainActivity extends AppCompatActivity implements OnPageChangeListener
 {
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 	public static final String SHARED_PREF = "sp";
