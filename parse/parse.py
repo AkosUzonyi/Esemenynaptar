@@ -1,4 +1,6 @@
-﻿import re
+#!/usr/bin/python
+
+import re
 import os
 import codecs
 import errno
