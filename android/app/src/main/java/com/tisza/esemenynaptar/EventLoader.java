@@ -42,7 +42,7 @@ public class EventLoader
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH);
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		if (month < 8) year--;
+		if (month < 7) year--;
 		try
 		{
 			StringBuilder sb = new StringBuilder();
