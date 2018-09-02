@@ -14,7 +14,6 @@ public class DailyReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		System.out.println("receive");
 		if (!context.getSharedPreferences(MainActivity.SHARED_PREF, Context.MODE_PRIVATE).getBoolean(MainActivity.NOTIFICATIONS_ENABLED, true))
 			return;
 		
@@ -54,8 +53,7 @@ public class DailyReceiver extends BroadcastReceiver
 		calendar.set(Calendar.SECOND, 0);
 		calendar.add(Calendar.MINUTE, time);
 		long triggerAtMillis = calendar.getTimeInMillis() + (calendar.getTimeInMillis() < System.currentTimeMillis() ? AlarmManager.INTERVAL_DAY : 0);
-		System.out.println(triggerAtMillis - System.currentTimeMillis());
-		
+
 		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, DailyReceiver.class), 0);
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, AlarmManager.INTERVAL_DAY, pi);
