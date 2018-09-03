@@ -1,11 +1,10 @@
 package com.tisza.esemenynaptar;
 
-import java.util.*;
-import java.util.regex.*;
-
 import android.app.*;
 import android.content.*;
-import android.support.v4.app.*;
+
+import java.util.*;
+import java.util.regex.*;
 
 public class DailyReceiver extends BroadcastReceiver
 {
@@ -32,7 +31,7 @@ public class DailyReceiver extends BroadcastReceiver
 			{
 				Matcher matcher = contentTextPattern.matcher(event);
 				
-				NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+				Notification.Builder builder = new Notification.Builder(context);
 				builder.setSmallIcon(category.getImageRes());
 				builder.setContentTitle(context.getText(category.getDisplayNameRes()));
 				builder.setContentText(event.substring(0, 30) + "...");
