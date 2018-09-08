@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnPageChangeListe
 		if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
 			calendar.setTimeInMillis(savedInstanceState.getLong(SAVED_DATE));
 		pagerAdapter.setDate(calendar);
-		
+
+		DailyReceiver.createNotificationChannel(this);
 		DailyReceiver.schedule(this);
 		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.cancelAll();

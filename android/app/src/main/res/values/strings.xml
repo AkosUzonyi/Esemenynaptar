@@ -3,7 +3,10 @@
 
     <string name="app_name">Eseménynaptár</string>
     <string name="no_events">Nincs esemény erre a napra</string>
-    
+
+    <string name="notification_channel_name">Események</string>
+    <string name="notification_channel_description">Értesítés minden nap a megadott időpontban az aznapi eseményekről</string>
+
     <string name="irodalom">Irodalom</string>
     <string name="tortenelem">Történelem</string>
   	<string name="zenetortenet">Zenetörténet</string>

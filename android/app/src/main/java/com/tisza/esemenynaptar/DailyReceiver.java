@@ -2,6 +2,7 @@ package com.tisza.esemenynaptar;
 
 import android.app.*;
 import android.content.*;
+import android.os.*;
 
 import java.util.*;
 import java.util.regex.*;
@@ -9,7 +10,9 @@ import java.util.regex.*;
 public class DailyReceiver extends BroadcastReceiver
 {
 	private static final Pattern contentTextPattern = Pattern.compile("(.{0,50})[,. \\s].*");
-	
+	private static final String NOTIFICATION_CHANNEL_ID = "event";
+	private static final String NOTIFICATION_GROUP = "event";
+
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
@@ -37,6 +40,17 @@ public class DailyReceiver extends BroadcastReceiver
 				builder.setContentText(event.substring(0, 30) + "...");
 				builder.setContentIntent(pendingIntent);
 				builder.setAutoCancel(true);
+				builder.setStyle(new Notification.BigTextStyle().bigText(event));
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
+					builder.setGroup(NOTIFICATION_GROUP);
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+					builder.setChannelId(NOTIFICATION_CHANNEL_ID);
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+					builder.setCategory(Notification.CATEGORY_RECOMMENDATION);
+
 				nm.notify(category.getID(), builder.build());
 			}
 		}
@@ -56,5 +70,19 @@ public class DailyReceiver extends BroadcastReceiver
 		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, DailyReceiver.class), 0);
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, AlarmManager.INTERVAL_DAY, pi);
+	}
+
+	public static final void createNotificationChannel(Context context)
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+			return;
+
+		String name = context.getString(R.string.notification_channel_name);
+		String description = context.getString(R.string.notification_channel_description);
+		NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+		channel.setDescription(description);
+
+		NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+		notificationManager.createNotificationChannel(channel);
 	}
 }
