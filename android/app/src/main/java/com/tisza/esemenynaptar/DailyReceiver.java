@@ -51,6 +51,9 @@ public class DailyReceiver extends BroadcastReceiver
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
 					builder.setCategory(Notification.CATEGORY_RECOMMENDATION);
 
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+					builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+
 				nm.notify(category.getID(), builder.build());
 			}
 		}
