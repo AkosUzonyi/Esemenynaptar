@@ -4,18 +4,25 @@ import re
 import os
 import codecs
 import errno
+import sys
 
+categories = ["irodalom", "tortenelem", "zenetortenet", "vizualis_kultura"]
 months = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"]
 
-category_regexp = re.compile("#category (.*)\n")
+year_regexp = re.compile("20(\d){2}\n")
 month_regexp = re.compile("(" + "|".join(months) + ")\n")
 day_regexp = re.compile("(\d+)\. *?\t(.*)\n")
 uri_regexp = re.compile("(?<=\s)http\S*")
 uri_www_regexp = re.compile("(?<=\s)www\S*")
 
-dir = "alma"
+if len(sys.argv) < 2:
+	print("not enough arguments")
+	exit(1)
 
-category = "?"
+srcFile = sys.argv[1]
+dstDir = sys.argv[2]
+
+semesterPos = -1
 month = "?"
 day = "?"
 text = ""
@@ -31,32 +38,26 @@ def mkdir_p(path):
 
 def printBuf():
 	global text
-	if text == "":
-		return
-	
-	text = uri_regexp.sub("<a href='\\g<0>'>\\g<0></a>", text);
-	text = uri_www_regexp.sub("<a href='http://\\g<0>'>\\g<0></a>", text);
-	
-	if True:
-		dirPath = os.path.join(dir, category, str(month))
+
+	if text != "" and semesterPos >= 0:
+		text = uri_regexp.sub("<a href='\\g<0>'>\\g<0></a>", text);
+		text = uri_www_regexp.sub("<a href='http://\\g<0>'>\\g<0></a>", text);
+		
+		dirPath = os.path.join(dstDir, categories[semesterPos // 2], str(month))
 		mkdir_p(dirPath)
 		filePath = os.path.join(dirPath, day + ".txt")
 		with codecs.open(filePath, "w", "utf-8") as file:
 			file.write(text)
-	else:
-		print(category, month, day, text[0:40], sep="\t")
 	
 	text = ""
 
-with open("plain.txt", "r", encoding="utf-8") as file:
+with open(srcFile, "r", encoding="utf-8") as file:
 	for line in file:
 		
-		#print(line)
-		categoryMatch = category_regexp.fullmatch(line)
-		if categoryMatch is not None:
+		yearMatch = year_regexp.fullmatch(line)
+		if yearMatch is not None:
 			printBuf()
-			category = categoryMatch.group(1)
-			#print(category)
+			semesterPos += 1
 			continue
 		
 		monthMatch = month_regexp.fullmatch(line)
@@ -73,3 +74,5 @@ with open("plain.txt", "r", encoding="utf-8") as file:
 			continue
 		
 		text += line
+		
+	printBuf();
