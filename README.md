@@ -1,7 +1,7 @@
 # Esemenynaptar
 
-A Katolikus Pedagógiai Intézet (www.katped.hu) a 2017/18-es tanévre készített
-eseménynaptár alkalmazással, a Sík Sándor Tanáregylet által elindult hagyományt folytatva,
+A Katolikus Pedagógiai Intézet (www.katped.hu) eseménynaptár alkalmazásával,
+a Sík Sándor Tanáregylet által elindult hagyományt folytatva,
 segíteni kívánja a humán tárgyakat oktató tanárokat és tanítókat, valamint az
 osztályfőnököket, hogy a tanév során a jeles évfordulókról megemlékezhessenek. Az
 eseménynaptár a korábbi évekhez hasonlóan a magyar irodalom, a magyar történelem, a
@@ -11,7 +11,7 @@ kollégái figyelmét a jeles napokra.
 
 összeállították:
 Mihályi Anikó – magyar irodalom
-Gianone András – magyar történelem
+Kozicz János – magyar történelem
 Blazsek Andrea – zenetörténet
 Takács Szilvia – vizuális kultúra
 szerkesztette: Gianone András
