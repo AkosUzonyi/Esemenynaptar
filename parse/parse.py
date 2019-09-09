@@ -9,11 +9,11 @@ import sys
 categories = ["irodalom", "tortenelem", "zenetortenet", "vizualis_kultura"]
 months = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"]
 
-year_regexp = re.compile("20(\d){2}\n")
-month_regexp = re.compile("(" + "|".join(months) + ")\n")
-day_regexp = re.compile("(\d+)\. *?\t(.*)\n")
-uri_regexp = re.compile("(?<=\s)http\S*")
-uri_www_regexp = re.compile("(?<=\s)www\S*")
+year_regexp = re.compile(r"20(\d){2}\n")
+month_regexp = re.compile(r"(" + "|".join(months) + ")\n")
+day_regexp = re.compile(r"(\d+)\. *?\t(.*)\n")
+uri_regexp = re.compile(r"(?<=\s)http\S*")
+uri_www_regexp = re.compile(r"(?<=\s)www\S*")
 
 if len(sys.argv) < 2:
 	print("not enough arguments")
@@ -40,8 +40,8 @@ def printBuf():
 	global text
 
 	if text != "" and semesterPos >= 0:
-		text = uri_regexp.sub("<a href='\\g<0>'>\\g<0></a>", text);
-		text = uri_www_regexp.sub("<a href='http://\\g<0>'>\\g<0></a>", text);
+		text = uri_regexp.sub("<a href='\\g<0>'>\\g<0></a>", text)
+		text = uri_www_regexp.sub("<a href='http://\\g<0>'>\\g<0></a>", text)
 		
 		dirPath = os.path.join(dstDir, categories[semesterPos // 2], str(month))
 		mkdir_p(dirPath)
@@ -75,4 +75,4 @@ with open(srcFile, "r", encoding="utf-8") as file:
 		
 		text += line
 		
-	printBuf();
+	printBuf()
