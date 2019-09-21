@@ -21,10 +21,11 @@ public class MyPagerAdapter extends PagerAdapter implements ViewPager.OnPageChan
 	{
 		this.eventLoader = eventLoader;
 		this.pager = pager;
-		
+
+		LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (int i = 0; i < CHILD_COUNT; i++)
 		{
-			childs[i] = new ListView(context);
+			childs[i] = (ListView)layoutInflater.inflate(R.layout.event_list_view, pager, false);
 			childs[i].setAdapter(new EventListAdapter());
 		}
 	}

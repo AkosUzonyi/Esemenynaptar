@@ -1,5 +1,6 @@
 package com.tisza.esemenynaptar;
 
+import android.content.*;
 import android.text.*;
 import android.text.method.*;
 import android.view.*;
@@ -40,21 +41,57 @@ public class EventListAdapter extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-		TextView view;
+
 		if (events.isEmpty())
 		{
 			if (noEventsView == null)
-			{
 				noEventsView = (TextView)inflater.inflate(R.layout.no_events_view, parent, false);
-			}
-			view = noEventsView;
+
+			return noEventsView;
+		}
+
+		View view;
+		ViewHolder viewHolder;
+		if (convertView != null && convertView != noEventsView)
+		{
+			view = convertView;
+			viewHolder = (ViewHolder)convertView.getTag();
 		}
 		else
 		{
-			view = (TextView)(convertView != null && convertView != noEventsView ? convertView : inflater.inflate(R.layout.event_view, parent, false));
-			view.setText(Html.fromHtml(events.get(position).getText()));
-			view.setMovementMethod(LinkMovementMethod.getInstance());
+			view = inflater.inflate(R.layout.event_view, parent, false);
+			viewHolder = new ViewHolder();
+			viewHolder.categoryTextView = view.findViewById(R.id.event_category_text);
+			viewHolder.iconView = view.findViewById(R.id.event_icon);
+			viewHolder.textView = view.findViewById(R.id.event_text);
+			viewHolder.shareButton = view.findViewById(R.id.event_share);
+			view.setTag(viewHolder);
 		}
+
+		final Event event = events.get(position);
+		viewHolder.iconView.setImageResource(event.getCategory().getImageRes());
+		viewHolder.categoryTextView.setText(event.getCategory().getDisplayNameRes());
+		viewHolder.textView.setText(Html.fromHtml(event.getText()));
+		viewHolder.textView.setMovementMethod(LinkMovementMethod.getInstance());
+		viewHolder.shareButton.setOnClickListener(v ->
+		{
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, event.getText());
+			sendIntent.setType("text/plain");
+
+			Intent shareIntent = Intent.createChooser(sendIntent, null);
+			v.getContext().startActivity(shareIntent);
+		});
+
 		return view;
+	}
+
+	private static class ViewHolder
+	{
+		ImageView iconView;
+		TextView categoryTextView;
+		TextView textView;
+		ImageButton shareButton;
 	}
 }
