@@ -27,7 +27,7 @@ public class DailyReceiver extends BroadcastReceiver
 		activityIntent.putExtra("today", true);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
 		
-		for (Category category : EventLoader.categories)
+		for (Category category : Category.values())
 		{
 			String event = eventLoader.loadEventForCategory(calendar, category);
 			if (event != null)

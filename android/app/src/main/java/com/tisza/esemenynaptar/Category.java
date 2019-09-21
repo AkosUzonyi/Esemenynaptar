@@ -1,13 +1,18 @@
 package com.tisza.esemenynaptar;
 
-public class Category
+public enum  Category
 {
+	IRODALOM(0, "irodalom", R.drawable.irodalom, R.string.irodalom),
+	TORTENELEM(1, "tortenelem", R.drawable.tortenelem, R.string.tortenelem),
+	ZENETORTENET(2, "zenetortenet", R.drawable.zenetortenet, R.string.zenetortenet),
+	VIZUALIS_KULTURA(3, "vizualis_kultura", R.drawable.vizualis_kultura, R.string.vizualis_kultura);
+
 	private int id;
 	private final String directoryName;
 	private final int imageRes;
 	private int displayNameRes;
 
-	public Category(int id, String directoryName, int imageRes, int displayNameRes)
+	Category(int id, String directoryName, int imageRes, int displayNameRes)
 	{
 		this.id = id;
 		this.directoryName = directoryName;

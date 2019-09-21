@@ -8,14 +8,7 @@ import java.util.*;
 public class EventLoader
 {
 	public static final String rootDir = "events";
-	public static final Category[] categories = new Category[]
-	{
-		new Category(0, "irodalom", R.drawable.irodalom, R.string.irodalom),
-		new Category(1, "tortenelem", R.drawable.tortenelem, R.string.tortenelem),
-		new Category(2, "zenetortenet", R.drawable.zenetortenet, R.string.zenetortenet),
-		new Category(3, "vizualis_kultura", R.drawable.vizualis_kultura, R.string.vizualis_kultura),
-	};
-	
+
 	private Context context;
 
 	public EventLoader(Context context)
@@ -26,7 +19,7 @@ public class EventLoader
 	public List<String> loadEvents(Calendar calendar)
 	{
 		List<String> events = new ArrayList<String>();
-		for (Category category : categories)
+		for (Category category : Category.values())
 		{
 			String event = loadEventForCategory(calendar, category);
 			if (event != null)
