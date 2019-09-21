@@ -12,8 +12,11 @@ months = ["Január", "Február", "Március", "Április", "Május", "Június", "J
 year_regexp = re.compile(r"20(\d){2}\n")
 month_regexp = re.compile(r"(" + "|".join(months) + ")\n")
 day_regexp = re.compile(r"(\d+)\. *?\t(.*)\n")
-uri_regexp = re.compile(r"(?<=\s)http\S*")
-uri_www_regexp = re.compile(r"(?<=\s)www\S*")
+uri_regexp = re.compile(r"http\S*")
+uri_www_regexp = re.compile(r"(?<!/)www\S*")
+italic_regexp = re.compile(r"„.*?”(.{,3}\(.*?\))?")
+ago_regexp = re.compile(r"\d+ éve")
+name_regexp = re.compile(r"([A-Z]\w* ){2,3}(?=\(\d{4}.(\d{4})?\))")
 
 if len(sys.argv) < 2:
 	print("not enough arguments")
@@ -42,6 +45,9 @@ def printBuf():
 	if text != "" and semesterPos >= 0:
 		text = uri_regexp.sub("<a href='\\g<0>'>\\g<0></a>", text)
 		text = uri_www_regexp.sub("<a href='http://\\g<0>'>\\g<0></a>", text)
+		text = italic_regexp.sub("<i>\\g<0></i>", text)
+		text = ago_regexp.sub("<b>\\g<0></b>", text)
+		text = name_regexp.sub("<b>\\g<0></b>", text)
 		
 		dirPath = os.path.join(dstDir, categories[semesterPos // 2], str(month))
 		mkdir_p(dirPath)
@@ -70,9 +76,9 @@ with open(srcFile, "r", encoding="utf-8") as file:
 		if dayMatch is not None:
 			printBuf()
 			day = dayMatch.group(1)
-			text += dayMatch.group(2)
+			text += dayMatch.group(2) + "<br>"
 			continue
 		
-		text += line
+		text += line + "<br>"
 		
 	printBuf()
