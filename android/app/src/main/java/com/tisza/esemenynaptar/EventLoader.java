@@ -16,21 +16,19 @@ public class EventLoader
 		this.context = context;
 	}
 
-	public List<String> loadEvents(Calendar calendar)
+	public List<Event> loadEvents(Calendar calendar)
 	{
-		List<String> events = new ArrayList<String>();
+		List<Event> events = new ArrayList<>();
 		for (Category category : Category.values())
 		{
-			String event = loadEventForCategory(calendar, category);
+			Event event = loadEventForCategory(calendar, category);
 			if (event != null)
-			{
 				events.add(event);
-			}
 		}
 		return events;
 	}
 	
-	public String loadEventForCategory(Calendar calendar, Category category)
+	private Event loadEventForCategory(Calendar calendar, Category category)
 	{
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH);
@@ -47,7 +45,7 @@ public class EventLoader
 				sb.append(buf, 0, read);
 			}
 			r.close();
-			return sb.toString();
+			return new Event(category, sb.toString());
 		}
 		catch (FileNotFoundException e)
 		{

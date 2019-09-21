@@ -9,10 +9,10 @@ import java.util.*;
 
 public class EventListAdapter extends BaseAdapter
 {
-	private List<String> events = new ArrayList<String>();
+	private List<Event> events = new ArrayList<>();
 	private TextView noEventsView = null;
 
-	public void setEvents(List<String> events)
+	public void setEvents(List<Event> events)
 	{
 		this.events = events;
 		notifyDataSetChanged();
@@ -52,7 +52,7 @@ public class EventListAdapter extends BaseAdapter
 		else
 		{
 			view = (TextView)(convertView != null && convertView != noEventsView ? convertView : inflater.inflate(R.layout.event_view, parent, false));
-			view.setText(Html.fromHtml(events.get(position)));
+			view.setText(Html.fromHtml(events.get(position).getText()));
 			view.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		return view;
