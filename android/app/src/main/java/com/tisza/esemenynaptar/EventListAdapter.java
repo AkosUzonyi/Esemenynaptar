@@ -1,11 +1,11 @@
 package com.tisza.esemenynaptar;
 
-import java.util.*;
-
 import android.text.*;
 import android.text.method.*;
 import android.view.*;
 import android.widget.*;
+
+import java.util.*;
 
 public class EventListAdapter extends BaseAdapter
 {

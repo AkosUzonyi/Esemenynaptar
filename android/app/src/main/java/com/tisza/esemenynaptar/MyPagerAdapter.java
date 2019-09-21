@@ -1,14 +1,13 @@
 package com.tisza.esemenynaptar;
 
-import java.util.*;
-
 import android.content.*;
-import android.support.v4.view.*;
-import android.support.v4.view.ViewPager.*;
 import android.view.*;
 import android.widget.*;
+import androidx.viewpager.widget.*;
 
-public class MyPagerAdapter extends PagerAdapter implements OnPageChangeListener
+import java.util.*;
+
+public class MyPagerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener
 {
 	private static final int CHILD_COUNT = 5;
 	private static final int MIDDLE_CHILD = CHILD_COUNT / 2;

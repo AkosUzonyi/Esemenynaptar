@@ -3,17 +3,16 @@ package com.tisza.esemenynaptar;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.support.v4.view.*;
-import android.support.v4.view.ViewPager.*;
-import android.support.v7.app.*;
-import android.support.v7.widget.Toolbar;
 import android.view.*;
 import android.widget.*;
+import androidx.appcompat.app.*;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.*;
 
 import java.text.*;
 import java.util.*;
 
-public class MainActivity extends AppCompatActivity implements OnPageChangeListener
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener
 {
 	public static final int MILLIS_PER_DAY = 86400000;
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

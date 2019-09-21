@@ -1,9 +1,9 @@
 package com.tisza.esemenynaptar;
 
+import android.content.*;
+
 import java.io.*;
 import java.util.*;
-
-import android.content.*;
 
 public class EventLoader
 {
