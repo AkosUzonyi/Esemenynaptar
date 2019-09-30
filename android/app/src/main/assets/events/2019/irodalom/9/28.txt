@@ -1,14 +1,15 @@
-175 éve halt meg Kisfaludy Sándor (1772–1844) költő. Győrben és Pozsonyban jogot tanult, majd a katonai pályát választotta. Az 1793–1796-os években a bécsi testőrség tagja. Részt vett a franciák elleni hadjáratban, fogságba esett. 1799-ben leszerelt, a következő évben feleségül vette Szegedy Rózát, akivel Sümegen élt haláláig. Bekapcsolódott a nyelvújítási harcba. Himfy szerelmei – A kesergő szerelem (1801) című költeményeivel robbant be a köztudatba, az ország ünnepelt költője lett. A magyar irodalmi romantika előkészítője, főleg szerelmi lírájával alkotott 	maradandót. Az általa létrehozott dalalakzatot Himfy-strófának nevezik a verstanban. „A magyar irodalmi ízlés jelentős fordulatát vezette be,”és „polgárjogot szerzett az addig egyházi és világi fórumok cenzúrája alá vetett szerelmi poézisnak”.(Toldy István) Részt vett a Keszthelyi Helikoni Ünnepségeken, kezdeményezője volt a Balatonfüredi Színház létrehozásának. Szegedy Róza badacsonyi házában írta alkotásai jelentős részét. Az épület ma irodalmi emlékmúzeum, Kisfaludy Sándor badacsonyi présháza pedig ismert vendéglő. Művei a vidéki nemesi életmód idealizálását, a magyar nemesség múltba fordulását, hősi életszemléletét tükrözik. Jelentős szerepet játszik költészetében a dunántúli táj.1. Dal. (Himfy szerelmei)
-Az életnek tengerében
-Két örvény van: szív és ész;
-A kettőnek egygyikében
-A jobb ember könnyen vész.
-Az ész ezer bajt okozó; -
-Ezt el lehet kerűlni;
-A szív, minthogy ragadozó,
-Könnyű benn elmerűlni.
-Engem a sors forgó szele
-Ez örvénybe csapott bele;
-S elragadt ez engemet -
-A szív szerzi vesztemet.
-
+<b>175 éve</b> halt meg <b>Kisfaludy Sándor </b>(1772–1844) költő. Győrben és Pozsonyban jogot tanult, majd a katonai pályát választotta. Az 1793–1796-os években a bécsi testőrség tagja. Részt vett a franciák elleni hadjáratban, fogságba esett. 1799-ben leszerelt, a következő évben feleségül vette Szegedy Rózát, akivel Sümegen élt haláláig. Bekapcsolódott a nyelvújítási harcba. Himfy szerelmei – A kesergő szerelem (1801) című költeményeivel robbant be a köztudatba, az ország ünnepelt költője lett. A magyar irodalmi romantika előkészítője, főleg szerelmi lírájával alkotott 	maradandót. Az általa létrehozott dalalakzatot Himfy-strófának nevezik a verstanban. <i>„A magyar irodalmi ízlés jelentős fordulatát vezette be,”</i>és <i>„polgárjogot szerzett az addig egyházi és világi fórumok cenzúrája alá vetett szerelmi poézisnak”.(Toldy István)</i> Részt vett a Keszthelyi Helikoni Ünnepségeken, kezdeményezője volt a Balatonfüredi Színház létrehozásának. Szegedy Róza badacsonyi házában írta alkotásai jelentős részét. Az épület ma irodalmi emlékmúzeum, Kisfaludy Sándor badacsonyi présháza pedig ismert vendéglő. Művei a vidéki nemesi életmód idealizálását, a magyar nemesség múltba fordulását, hősi életszemléletét tükrözik. Jelentős szerepet játszik költészetében a dunántúli táj.<br>1. Dal. (Himfy szerelmei)
+<br>Az életnek tengerében
+<br>Két örvény van: szív és ész;
+<br>A kettőnek egygyikében
+<br>A jobb ember könnyen vész.
+<br>Az ész ezer bajt okozó; -
+<br>Ezt el lehet kerűlni;
+<br>A szív, minthogy ragadozó,
+<br>Könnyű benn elmerűlni.
+<br>Engem a sors forgó szele
+<br>Ez örvénybe csapott bele;
+<br>S elragadt ez engemet -
+<br>A szív szerzi vesztemet.
+<br>
+<br>

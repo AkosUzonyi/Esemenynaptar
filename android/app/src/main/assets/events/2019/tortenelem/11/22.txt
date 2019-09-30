@@ -1,1 +1,2 @@
-100 éve, 1919-ben szabadlábra helyezték Stromfeld Aurélt, a magyar vörös hadsereg egykori vezérkari főnökét.75 éve, 1944-ben szovjet bábáskodás mellett Dálnoki Miklós Béla vezérezredes miniszterelnökségével, Debrecenben megalakult az Ideiglenes Nemzeti Kormány.
+<b>100 éve</b>, 1919-ben szabadlábra helyezték Stromfeld Aurélt, a magyar vörös hadsereg egykori vezérkari főnökét.<br><b>75 éve</b>, 1944-ben szovjet bábáskodás mellett Dálnoki Miklós Béla vezérezredes miniszterelnökségével, Debrecenben megalakult az Ideiglenes Nemzeti Kormány.
+<br>
