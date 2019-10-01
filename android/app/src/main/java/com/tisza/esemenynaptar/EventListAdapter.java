@@ -5,24 +5,35 @@ import android.text.*;
 import android.text.method.*;
 import android.view.*;
 import android.widget.*;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.*;
+import com.tisza.esemenynaptar.database.*;
 
 import java.util.*;
 
 public class EventListAdapter extends BaseAdapter
 {
-	private List<Event> events = new ArrayList<>();
+	private LiveData<List<Event>> events;
 	private TextView noEventsView = null;
+	private Observer<List<Event>> observer = (list -> notifyDataSetChanged());
 
-	public void setEvents(List<Event> events)
+	public void setEvents(LiveData<List<Event>> newEvents)
 	{
-		this.events = events;
-		notifyDataSetChanged();
+		if (events != null)
+			events.removeObserver(observer);
+		this.events = newEvents;
+		events.observeForever(observer);
+	}
+
+	private List<Event> getCurrentEvents()
+	{
+		return events == null || events.getValue() == null ? Collections.emptyList() : events.getValue();
 	}
 	
 	@Override
 	public int getCount()
 	{
-		return Math.max(1, events.size());
+		return Math.max(1, getCurrentEvents().size());
 	}
 
 	@Override
@@ -42,7 +53,7 @@ public class EventListAdapter extends BaseAdapter
 	{
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-		if (events.isEmpty())
+		if (getCurrentEvents().isEmpty())
 		{
 			if (noEventsView == null)
 				noEventsView = (TextView)inflater.inflate(R.layout.no_events_view, parent, false);
@@ -68,7 +79,7 @@ public class EventListAdapter extends BaseAdapter
 			view.setTag(viewHolder);
 		}
 
-		final Event event = events.get(position);
+		final Event event = getCurrentEvents().get(position);
 		viewHolder.iconView.setImageResource(event.getCategory().getImageRes());
 		viewHolder.categoryTextView.setText(event.getCategory().getDisplayNameRes());
 		viewHolder.textView.setText(Html.fromHtml(event.getText()));

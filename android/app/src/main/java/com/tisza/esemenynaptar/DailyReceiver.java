@@ -3,6 +3,10 @@ package com.tisza.esemenynaptar;
 import android.app.*;
 import android.content.*;
 import android.os.*;
+import androidx.lifecycle.*;
+import androidx.lifecycle.Observer;
+import androidx.room.*;
+import com.tisza.esemenynaptar.database.*;
 
 import java.util.*;
 import java.util.regex.*;
@@ -18,44 +22,10 @@ public class DailyReceiver extends BroadcastReceiver
 	{
 		if (!context.getSharedPreferences(MainActivity.SHARED_PREF, Context.MODE_PRIVATE).getBoolean(MainActivity.NOTIFICATIONS_ENABLED, true))
 			return;
-		
-		NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-		EventLoader eventLoader = new EventLoader(context);
+
 		Calendar calendar = Calendar.getInstance();
-		
-		Intent activityIntent = new Intent(context, MainActivity.class);
-		activityIntent.putExtra("today", true);
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
-		
-		for (Event event : eventLoader.loadEvents(calendar))
-		{
-			if (event == null)
-				continue;
-
-			Matcher matcher = contentTextPattern.matcher(event.getText());
-
-			Notification.Builder builder = new Notification.Builder(context);
-			builder.setSmallIcon(event.getCategory().getImageRes());
-			builder.setContentTitle(context.getText(event.getCategory().getDisplayNameRes()));
-			builder.setContentText(event.getText().substring(0, 30) + "...");
-			builder.setContentIntent(pendingIntent);
-			builder.setAutoCancel(true);
-			builder.setStyle(new Notification.BigTextStyle().bigText(event.getText()));
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
-				builder.setGroup(NOTIFICATION_GROUP);
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-				builder.setChannelId(NOTIFICATION_CHANNEL_ID);
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-				builder.setCategory(Notification.CATEGORY_RECOMMENDATION);
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-				builder.setVisibility(Notification.VISIBILITY_PUBLIC);
-
-			nm.notify(event.getCategory().getID(), builder.build());
-		}
+		LiveData<List<Event>> eventsLiveData = EventDatabase.getInstance().eventDao().getEventsForDate(calendar);
+		eventsLiveData.observeForever(new EventObserver(context, eventsLiveData));
 	}
 	
 	public static void schedule(Context context)
@@ -86,5 +56,62 @@ public class DailyReceiver extends BroadcastReceiver
 
 		NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 		notificationManager.createNotificationChannel(channel);
+	}
+
+	private static class EventObserver implements Observer<List<Event>>
+	{
+		private final Context context;
+		private LiveData<List<Event>> eventsLiveData;
+
+		private EventObserver(Context context, LiveData<List<Event>> eventsLiveData)
+		{
+			this.context = context;
+			this.eventsLiveData = eventsLiveData;
+		}
+
+		@Override
+		public void onChanged(List<Event> events)
+		{
+			if (events == null)
+				return;
+
+			NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+			Intent activityIntent = new Intent(context, MainActivity.class);
+			activityIntent.putExtra("today", true);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
+
+			for (Event event : events)
+			{
+				if (event == null)
+					continue;
+
+				Matcher matcher = contentTextPattern.matcher(event.getText());
+
+				Notification.Builder builder = new Notification.Builder(context);
+				builder.setSmallIcon(event.getCategory().getImageRes());
+				builder.setContentTitle(context.getText(event.getCategory().getDisplayNameRes()));
+				builder.setContentText(event.getText().substring(0, 30) + "...");
+				builder.setContentIntent(pendingIntent);
+				builder.setAutoCancel(true);
+				builder.setStyle(new Notification.BigTextStyle().bigText(event.getText()));
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
+					builder.setGroup(NOTIFICATION_GROUP);
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+					builder.setChannelId(NOTIFICATION_CHANNEL_ID);
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+					builder.setCategory(Notification.CATEGORY_RECOMMENDATION);
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+					builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+
+				nm.notify(event.getCategory().getID(), builder.build());
+			}
+
+			eventsLiveData.removeObserver(this);
+		}
 	}
 }

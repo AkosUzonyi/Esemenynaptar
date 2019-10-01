@@ -7,8 +7,11 @@ import android.view.*;
 import android.widget.*;
 import androidx.appcompat.app.*;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.*;
 import androidx.viewpager.widget.*;
+import com.tisza.esemenynaptar.database.*;
 
+import java.io.*;
 import java.text.*;
 import java.util.*;
 
@@ -26,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	private ViewPager pager;
 	private MyPagerAdapter pagerAdapter;
 	private LayoutInflater inflater;
-	private EventLoader eventLoader;
 	private SharedPreferences sharedPreferences;
 
 	private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		{
 			pagerAdapter.setDate(year, monthOfYear, dayOfMonth);
 		}
-	}; 
+	};
 
 	private TimePickerDialog.OnTimeSetListener nofificationTimeSetListener = new TimePickerDialog.OnTimeSetListener()
 	{
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 			editor.commit();
 			DailyReceiver.schedule(MainActivity.this);
 		}
-	}; 
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		super.onCreate(savedInstanceState);
 
 		inflater = getLayoutInflater();
-		eventLoader = new EventLoader(this);
+		EventDatabase.init(this);
 		sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-		
+
 		setContentView(R.layout.activity_main);
 		
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setOnPageChangeListener(this);
-		pagerAdapter = new MyPagerAdapter(this, pager, eventLoader);
+		pagerAdapter = new MyPagerAdapter(this, pager);
 		pager.setAdapter(pagerAdapter);
 		Calendar calendar = Calendar.getInstance();
 		long today = calendar.getTimeInMillis() / MILLIS_PER_DAY;
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.cancelAll();
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle bundle)
 	{

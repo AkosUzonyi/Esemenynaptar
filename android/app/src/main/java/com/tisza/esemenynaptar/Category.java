@@ -8,14 +8,14 @@ public enum  Category
 	VIZUALIS_KULTURA(3, "vizualis_kultura", R.drawable.vizualis_kultura, R.string.vizualis_kultura);
 
 	private int id;
-	private final String directoryName;
+	private final String stringID;
 	private final int imageRes;
 	private int displayNameRes;
 
-	Category(int id, String directoryName, int imageRes, int displayNameRes)
+	Category(int id, String stringID, int imageRes, int displayNameRes)
 	{
 		this.id = id;
-		this.directoryName = directoryName;
+		this.stringID = stringID;
 		this.imageRes = imageRes;
 		this.displayNameRes = displayNameRes;
 	}
@@ -25,9 +25,9 @@ public enum  Category
 		return id;
 	}
 	
-	public String getDirectoryName()
+	public String getStringID()
 	{
-		return directoryName;
+		return stringID;
 	}
 	
 	public int getImageRes()
@@ -38,5 +38,13 @@ public enum  Category
 	public int getDisplayNameRes()
 	{
 		return displayNameRes;
+	}
+
+	public static Category fromStringID(String str)
+	{
+		for (Category category : values())
+			if (category.getStringID().equals(str))
+				return category;
+		return null;
 	}
 }
