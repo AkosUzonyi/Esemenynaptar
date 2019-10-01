@@ -8,9 +8,9 @@ first_month = 6 #first month of the first semester - months before this belongs 
 categories = ["irodalom", "tortenelem", "zenetortenet", "vizualis_kultura"]
 months = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"]
 
-year_regexp = re.compile(r"(20\d{2})\n")
-month_regexp = re.compile(r"(" + "|".join(months) + ")\n")
-day_regexp = re.compile(r"(\d+)\. *?\t(.*)\n")
+year_regexp = re.compile(r"(20\d{2})")
+month_regexp = re.compile(r"(" + "|".join(months) + ")")
+day_regexp = re.compile(r"(\d+)\. *?\t(.*)")
 uri_regexp = re.compile(r"http\S*")
 uri_www_regexp = re.compile(r"(?<!/)www\S*")
 italic_regexp = re.compile(r"„.*?”(.{,3}\(.*?\))?")
@@ -62,6 +62,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 	cursor.execute("CREATE TABLE IF NOT EXISTS event(year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, category TEXT NOT NULL, text TEXT NOT NULL, PRIMARY KEY (year, month, day, category));")
 
 	for line in file:
+		line = line.strip("\n")
 		
 		yearMatch = year_regexp.fullmatch(line)
 		if yearMatch is not None:
