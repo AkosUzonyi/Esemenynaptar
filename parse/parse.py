@@ -8,7 +8,7 @@ first_month = 6 #first month of the first semester - months before this belongs 
 categories = ["irodalom", "tortenelem", "zenetortenet", "vizualis_kultura"]
 months = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"]
 
-year_regexp = re.compile(r"(20\d{2})")
+year_regexp = re.compile(r"(20\d{2})\.?")
 month_regexp = re.compile(r"(" + "|".join(months) + ")")
 day_regexp = re.compile(r"(\d+)\. *?\t(.*)")
 uri_regexp = re.compile(r"http\S*")
@@ -103,7 +103,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 			continue
 		
 		text += line + "<br>"
-		
+
 	writeRecord()
 	printStat()
 
