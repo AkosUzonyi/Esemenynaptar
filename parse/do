@@ -2,4 +2,5 @@
 
 year="$1"
 soffice --headless --convert-to txt:Text "$year.docx"
+echo
 ./parse.py "$year.txt" "../android/app/src/main/assets/event.db"

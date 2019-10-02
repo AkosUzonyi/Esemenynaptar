@@ -61,6 +61,8 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 	cursor = db.cursor()
 	cursor.execute("CREATE TABLE IF NOT EXISTS event(year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, category TEXT NOT NULL, text TEXT NOT NULL, PRIMARY KEY (year, month, day, category));")
 
+	skipped = None
+
 	for line in file:
 		line = line.strip("\n")
 		
@@ -74,6 +76,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 			month = -1
 			day = -1
 			semesterPos += 1
+			text = ""
 
 			#as soon as we know the year, delete old events in this year
 			if semesterPos == 0:
@@ -104,7 +107,16 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 		
 		text += line + "<br>"
 
+		#we don't need the ending of the document (table of contents)
+		if semesterPos >= 0 and text.endswith("<br>" * 5):
+			skipped = file.read()
+
 	writeRecord()
 	printStat()
+
+	if skipped != None:
+		print()
+		print("skipped end of document:")
+		print(skipped.strip())
 
 	db.commit()
