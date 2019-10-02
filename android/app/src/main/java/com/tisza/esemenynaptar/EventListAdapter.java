@@ -1,6 +1,7 @@
 package com.tisza.esemenynaptar;
 
 import android.content.*;
+import android.os.*;
 import android.text.*;
 import android.text.method.*;
 import android.view.*;
@@ -76,6 +77,7 @@ public class EventListAdapter extends BaseAdapter
 			viewHolder.iconView = view.findViewById(R.id.event_icon);
 			viewHolder.textView = view.findViewById(R.id.event_text);
 			viewHolder.shareButton = view.findViewById(R.id.event_share);
+			viewHolder.likeButton = view.findViewById(R.id.event_like);
 			view.setTag(viewHolder);
 		}
 
@@ -94,6 +96,17 @@ public class EventListAdapter extends BaseAdapter
 			Intent shareIntent = Intent.createChooser(sendIntent, null);
 			v.getContext().startActivity(shareIntent);
 		});
+		viewHolder.likeButton.setAlpha(event.isLiked() ? 1 : 0.3F);
+		viewHolder.likeButton.setOnClickListener(v -> new AsyncTask<Void, Void, Void>()
+		{
+			@Override
+			protected Void doInBackground(Void... voids)
+			{
+				event.setLiked(!event.isLiked());
+				EventDatabase.getInstance().eventDao().updateEvent(event);
+				return null;
+			}
+		}.execute());
 
 		return view;
 	}
@@ -103,6 +116,6 @@ public class EventListAdapter extends BaseAdapter
 		ImageView iconView;
 		TextView categoryTextView;
 		TextView textView;
-		ImageButton shareButton;
+		ImageButton likeButton, shareButton;
 	}
 }

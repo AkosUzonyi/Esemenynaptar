@@ -2,6 +2,7 @@ package com.tisza.esemenynaptar.database;
 
 import androidx.lifecycle.*;
 import androidx.room.*;
+import androidx.sqlite.db.*;
 
 import java.util.*;
 

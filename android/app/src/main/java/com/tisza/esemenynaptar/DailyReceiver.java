@@ -24,8 +24,11 @@ public class DailyReceiver extends BroadcastReceiver
 			return;
 
 		Calendar calendar = Calendar.getInstance();
-		LiveData<List<Event>> eventsLiveData = EventDatabase.getInstance().eventDao().getEventsForDate(calendar);
-		eventsLiveData.observeForever(new EventObserver(context, eventsLiveData));
+		EventDatabase.init(context, () ->
+		{
+			LiveData<List<Event>> eventsLiveData = EventDatabase.getInstance().eventDao().getEventsForDate(calendar);
+			eventsLiveData.observeForever(new EventObserver(context, eventsLiveData));
+		});
 	}
 	
 	public static void schedule(Context context)

@@ -12,14 +12,16 @@ public class Event
 	private Category category;
 	@NonNull
 	private String text;
+	private boolean isLiked;
 
-	public Event(int year, int month, int day, Category category, String text)
+	public Event(int year, int month, int day, Category category, String text, boolean isLiked)
 	{
 		this.year = year;
 		this.month = month;
 		this.day = day;
 		this.category = category;
 		this.text = text;
+		this.isLiked = isLiked;
 	}
 
 	public int getYear()
@@ -45,5 +47,40 @@ public class Event
 	public String getText()
 	{
 		return text;
+	}
+
+	public boolean isLiked()
+	{
+		return isLiked;
+	}
+
+	public void setYear(int year)
+	{
+		this.year = year;
+	}
+
+	public void setMonth(int month)
+	{
+		this.month = month;
+	}
+
+	public void setDay(int day)
+	{
+		this.day = day;
+	}
+
+	public void setCategory(@NonNull Category category)
+	{
+		this.category = category;
+	}
+
+	public void setText(@NonNull String text)
+	{
+		this.text = text;
+	}
+
+	public void setLiked(boolean liked)
+	{
+		isLiked = liked;
 	}
 }

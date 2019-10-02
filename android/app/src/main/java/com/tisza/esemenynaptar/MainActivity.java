@@ -7,11 +7,9 @@ import android.view.*;
 import android.widget.*;
 import androidx.appcompat.app.*;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.*;
 import androidx.viewpager.widget.*;
 import com.tisza.esemenynaptar.database.*;
 
-import java.io.*;
 import java.text.*;
 import java.util.*;
 
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	private MyPagerAdapter pagerAdapter;
 	private LayoutInflater inflater;
 	private SharedPreferences sharedPreferences;
+	private Calendar savedDate;
 
 	private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
 	{
@@ -58,28 +57,34 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		super.onCreate(savedInstanceState);
 
 		inflater = getLayoutInflater();
-		EventDatabase.init(this);
+		EventDatabase.init(this, this::onDatabaseReady);
 		sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 
 		setContentView(R.layout.activity_main);
 		
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		
+
+		savedDate = Calendar.getInstance();
+		long today = savedDate.getTimeInMillis() / MILLIS_PER_DAY;
+		if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
+			savedDate.setTimeInMillis(savedInstanceState.getLong(SAVED_DATE));
+
+		DailyReceiver.createNotificationChannel(this);
+		DailyReceiver.schedule(this);
+		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.cancelAll();
+	}
+
+	private void onDatabaseReady()
+	{
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setOnPageChangeListener(this);
 		pagerAdapter = new MyPagerAdapter(this, pager);
 		pager.setAdapter(pagerAdapter);
 		Calendar calendar = Calendar.getInstance();
 		long today = calendar.getTimeInMillis() / MILLIS_PER_DAY;
-		if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
-			calendar.setTimeInMillis(savedInstanceState.getLong(SAVED_DATE));
-		pagerAdapter.setDate(calendar);
-
-		DailyReceiver.createNotificationChannel(this);
-		DailyReceiver.schedule(this);
-		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.cancelAll();
+		pagerAdapter.setDate(savedDate);
 	}
 
 	@Override
