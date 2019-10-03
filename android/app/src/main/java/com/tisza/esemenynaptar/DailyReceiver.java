@@ -3,9 +3,9 @@ package com.tisza.esemenynaptar;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import androidx.lifecycle.*;
+import android.text.*;
 import androidx.lifecycle.Observer;
-import androidx.room.*;
+import androidx.lifecycle.*;
 import com.tisza.esemenynaptar.database.*;
 
 import java.util.*;
@@ -13,7 +13,6 @@ import java.util.regex.*;
 
 public class DailyReceiver extends BroadcastReceiver
 {
-	private static final Pattern contentTextPattern = Pattern.compile("(.{0,50})[,. \\s].*");
 	private static final String NOTIFICATION_CHANNEL_ID = "event";
 	private static final String NOTIFICATION_GROUP = "event";
 
@@ -89,15 +88,15 @@ public class DailyReceiver extends BroadcastReceiver
 				if (event == null)
 					continue;
 
-				Matcher matcher = contentTextPattern.matcher(event.getText());
+				Spanned text = Html.fromHtml(event.getText());
 
 				Notification.Builder builder = new Notification.Builder(context);
 				builder.setSmallIcon(event.getCategory().getImageRes());
 				builder.setContentTitle(context.getText(event.getCategory().getDisplayNameRes()));
-				builder.setContentText(event.getText().substring(0, 30) + "...");
+				builder.setContentText(text.toString().substring(0, 60) + "...");
 				builder.setContentIntent(pendingIntent);
 				builder.setAutoCancel(true);
-				builder.setStyle(new Notification.BigTextStyle().bigText(event.getText()));
+				builder.setStyle(new Notification.BigTextStyle().bigText(text));
 
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
 					builder.setGroup(NOTIFICATION_GROUP);
