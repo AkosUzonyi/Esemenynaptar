@@ -18,10 +18,13 @@
         <ImageView
             android:id="@+id/event_icon"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/event_category_text"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:scaleType="fitStart"
             android:adjustViewBounds="true"
         />
 
@@ -31,8 +34,34 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:padding="5dp"
             android:textStyle="bold"
-            android:textSize="25sp"
+            android:textSize="24dp"
+        />
+
+        <ImageButton
+            android:id="@+id/event_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@id/event_category_text"
+            android:layout_toLeftOf="@id/event_share"
+            android:layout_marginRight="5dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_thumb_up_black_24dp"
+            android:background="@null"
+        />
+
+        <ImageButton
+            android:id="@+id/event_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@id/event_category_text"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@android:drawable/ic_menu_share"
+            android:background="@null"
         />
 
         <TextView
@@ -45,40 +74,5 @@
             android:linksClickable="true"
             />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:layout_below="@id/event_text"
-            >
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
-                <ImageButton
-                    android:id="@+id/event_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/ic_thumb_up_black_24dp"
-                />
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
-                <ImageButton
-                    android:id="@+id/event_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:background="@android:drawable/ic_menu_share"
-                />
-            </FrameLayout>
-        </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
