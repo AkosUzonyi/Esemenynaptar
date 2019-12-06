@@ -14,7 +14,7 @@ day_regexp = re.compile(r"(\d+)\. *?\t(.*)")
 uri_regexp = re.compile(r"http\S*")
 uri_www_regexp = re.compile(r"(?<!/)www\S*")
 italic_regexp = re.compile(r"„.*?”(.{,3}\(.*?\))?")
-ago_regexp = re.compile(r"\d+ éve")
+ago_regexp = re.compile(r"\d+ éve[, ]")
 name_regexp = re.compile(r"([A-Z]\w* ){2,3}(?=\(\d{4}.(\d{4})?\))")
 
 if len(sys.argv) < 2:
