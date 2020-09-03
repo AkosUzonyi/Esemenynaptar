@@ -47,7 +47,7 @@ def writeRecord():
 			count += 1
 		except sqlite3.IntegrityError as ie:
 			print("error:", year, month, day, categories[semesterPos // 2], ie)
-	
+
 	text = ""
 
 def printStat():
@@ -65,7 +65,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 
 	for line in file:
 		line = line.strip("\n")
-		
+
 		yearMatch = year_regexp.fullmatch(line)
 		if yearMatch is not None:
 			if semesterPos >= 0:
@@ -83,14 +83,14 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 				cursor.execute(f"DELETE FROM event where year == ? and month >= {first_month} or year == ? and month < {first_month}", (year, year + 1))
 
 			continue
-		
+
 		monthMatch = month_regexp.fullmatch(line)
 		if monthMatch is not None:
 			writeRecord()
 			month = months.index(monthMatch.group(1))
 			day = -1
 			continue
-		
+
 		dayMatch = day_regexp.match(line)
 		if dayMatch is not None:
 
@@ -104,7 +104,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 			day = newDay
 			text += dayMatch.group(2) + "<br>"
 			continue
-		
+
 		text += line + "<br>"
 
 		#we don't need the ending of the document (table of contents)

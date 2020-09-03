@@ -19,22 +19,22 @@ public enum  Category
 		this.imageRes = imageRes;
 		this.displayNameRes = displayNameRes;
 	}
-	
+
 	public int getID()
 	{
 		return id;
 	}
-	
+
 	public String getStringID()
 	{
 		return stringID;
 	}
-	
+
 	public int getImageRes()
 	{
 		return imageRes;
 	}
-	
+
 	public int getDisplayNameRes()
 	{
 		return displayNameRes;

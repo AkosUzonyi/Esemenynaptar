@@ -29,7 +29,7 @@ public class DailyReceiver extends BroadcastReceiver
 			eventsLiveData.observeForever(new EventObserver(context, eventsLiveData));
 		});
 	}
-	
+
 	public static void schedule(Context context)
 	{
 		SharedPreferences sp = context.getSharedPreferences(MainActivity.SHARED_PREF, Context.MODE_PRIVATE);
