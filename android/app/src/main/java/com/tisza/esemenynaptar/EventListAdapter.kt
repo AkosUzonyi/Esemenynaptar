@@ -71,13 +71,12 @@ class EventListAdapter : BaseAdapter() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             v.context.startActivity(shareIntent)
         }
-        viewHolder.likeButton.setAlpha(if (event.isLiked) 1 else 0.3f)
-        viewHolder.likeButton.setOnClickListener { v: View? ->
-            object : AsyncTask<Void?, Void?, Void>() {
-                protected override fun doInBackground(vararg voids: Void): Void {
+        viewHolder.likeButton.alpha = if (event.isLiked) 1.0f else 0.3f
+        viewHolder.likeButton.setOnClickListener {
+            object : AsyncTask<Unit, Unit, Unit>() {
+                override fun doInBackground(vararg p0: Unit) {
                     event.isLiked = !event.isLiked
                     EventDatabase.instance.eventDao().updateEvent(event)
-                    return@setOnClickListener null
                 }
             }.execute()
         }

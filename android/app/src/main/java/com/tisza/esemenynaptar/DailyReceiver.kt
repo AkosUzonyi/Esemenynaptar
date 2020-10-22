@@ -11,10 +11,10 @@ import java.util.*
 
 class DailyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (!context.getSharedPreferences(MainActivity.Companion.SHARED_PREF, Context.MODE_PRIVATE).getBoolean(MainActivity.Companion.NOTIFICATIONS_ENABLED, true)) return
+        if (!context.getSharedPreferences(MainActivity.SHARED_PREF, Context.MODE_PRIVATE).getBoolean(MainActivity.NOTIFICATIONS_ENABLED, true)) return
         val calendar = Calendar.getInstance()
         EventDatabase.init(context) {
-            val eventsLiveData = EventDatabase.getInstance().eventDao().getEventsForDate(calendar)
+            val eventsLiveData = EventDatabase.instance.eventDao().getEventsForDate(calendar)
             eventsLiveData.observeForever(EventObserver(context, eventsLiveData))
         }
     }
@@ -51,8 +51,8 @@ class DailyReceiver : BroadcastReceiver() {
         private const val NOTIFICATION_CHANNEL_ID = "event"
         private const val NOTIFICATION_GROUP = "event"
         fun schedule(context: Context) {
-            val sp = context.getSharedPreferences(MainActivity.Companion.SHARED_PREF, Context.MODE_PRIVATE)
-            val time = sp.getInt(MainActivity.Companion.NOTIFICATION_TIME, 420)
+            val sp = context.getSharedPreferences(MainActivity.SHARED_PREF, Context.MODE_PRIVATE)
+            val time = sp.getInt(MainActivity.NOTIFICATION_TIME, 420)
             val calendar = Calendar.getInstance()
             calendar[Calendar.HOUR_OF_DAY] = 0
             calendar[Calendar.MINUTE] = 0

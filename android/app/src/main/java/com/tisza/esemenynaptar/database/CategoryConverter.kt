@@ -7,7 +7,7 @@ object CategoryConverter {
     @JvmStatic
 	@TypeConverter
     fun categoryFromString(str: String): Category {
-        return Category.fromStringID(str)
+        return Category.values().filter { it.stringID == str }.first()
     }
 
     @JvmStatic

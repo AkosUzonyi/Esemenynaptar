@@ -6,7 +6,7 @@ import androidx.room.*
 import androidx.sqlite.db.*
 import java.io.*
 
-@Database(entities = [Event::class], version = 1, exportSchema = false)
+@Database(entities = arrayOf(Event::class), version = 1, exportSchema = false)
 @TypeConverters(CategoryConverter::class)
 abstract class EventDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
@@ -14,12 +14,12 @@ abstract class EventDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "event.db"
         private const val NAME_SRC = "event_src.db"
-        var instance: EventDatabase? = null
+        lateinit var instance: EventDatabase
             private set
         private var tempDatabase: EventDatabase? = null
 
         @Synchronized
-        fun init(context: Context, onReady: Runnable) {
+        fun init(context: Context, onReady: () -> Unit) {
             tempDatabase = Room.databaseBuilder(context.applicationContext, EventDatabase::class.java, NAME).addCallback(object : Callback() {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     db.execSQL("ATTACH DATABASE ? AS event_src;", arrayOf<Any?>(copyAssetDatabaseToData(context)))
@@ -33,7 +33,7 @@ abstract class EventDatabase : RoomDatabase() {
                     Handler(context.mainLooper).post {
                         tempDatabase!!.close()
                         instance = Room.databaseBuilder(context.applicationContext, EventDatabase::class.java, NAME).build()
-                        onReady.run()
+                        onReady.invoke()
                     }
                     super.onOpen(db)
                 }
