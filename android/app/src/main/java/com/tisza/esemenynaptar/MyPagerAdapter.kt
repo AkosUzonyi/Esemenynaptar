@@ -8,39 +8,57 @@ import androidx.viewpager.widget.ViewPager.*
 import com.tisza.esemenynaptar.database.*
 import java.util.*
 
-class MyPagerAdapter(context: Context, private val pager: ViewPager?) : PagerAdapter(), OnPageChangeListener {
-    private val date = Calendar.getInstance()
-    private val childs = arrayOfNulls<ListView>(CHILD_COUNT)
-    private val adapters = arrayOfNulls<EventListAdapter>(CHILD_COUNT)
-    fun setDate(date: Calendar?) {
-        setDate(date!![Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
+class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdapter(), OnPageChangeListener {
+    companion object {
+        private const val CHILD_COUNT = 5
+        private const val MIDDLE_CHILD = CHILD_COUNT / 2
+    }
+
+    private var date = Calendar.getInstance()
+        set(value) {
+            setDate(value[Calendar.YEAR], value[Calendar.MONTH], value[Calendar.DAY_OF_MONTH])
+        }
+
+    private val childs: Array<ListView>
+    private val adapters: Array<EventListAdapter>
+
+    init {
+        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        childs = Array(5) {
+            layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView
+        }
+        adapters = Array(5) {
+            EventListAdapter()
+        }
+
+        for (i in 0 until CHILD_COUNT) {
+            childs[i].adapter = adapters[i]
+        }
     }
 
     fun setDate(year: Int, month: Int, day: Int) {
         date[year, month] = day
-        for (i in 0 until CHILD_COUNT) loadDataForChild(i)
-        pager!!.setCurrentItem(MIDDLE_CHILD, false)
+        for (i in 0 until CHILD_COUNT)
+            loadDataForChild(i)
+        pager.setCurrentItem(MIDDLE_CHILD, false)
         notifyDataSetChanged() //just for the titles
-    }
-
-    fun getDate(): Calendar {
-        return date
     }
 
     private fun loadDataForChild(childPos: Int) {
         val cal = date.clone() as Calendar
         cal.add(Calendar.DAY_OF_MONTH, childPos - MIDDLE_CHILD)
-        adapters[childPos]!!.setEvents(EventDatabase.instance.eventDao().getEventsForDate(cal))
-        childs[childPos]!!.setSelection(0)
+        adapters[childPos].setEvents(EventDatabase.instance.eventDao().getEventsForDate(cal))
+        childs[childPos].setSelection(0)
     }
 
     private fun shift(diff: Int) {
         require(!(diff <= -CHILD_COUNT || diff >= CHILD_COUNT)) { "cannot shift with values larger than CHILD_COUNT: $diff" }
+
         date.add(Calendar.DAY_OF_MONTH, diff)
         val oldAdapters = adapters.clone()
         for (i in 0 until CHILD_COUNT) {
             adapters[i] = oldAdapters[(i + diff + CHILD_COUNT) % CHILD_COUNT]
-            childs[i]!!.adapter = adapters[i]
+            childs[i].adapter = adapters[i]
             if (i + diff < 0 || i + diff >= CHILD_COUNT) loadDataForChild(i)
         }
     }
@@ -56,9 +74,9 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager?) : PagerAda
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val v: View? = childs[position]
+        val v = childs[position]
         container.addView(v)
-        return v!!
+        return v
     }
 
     override fun getCount(): Int {
@@ -71,25 +89,11 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager?) : PagerAda
 
     override fun onPageScrollStateChanged(state: Int) {
         if (state == SCROLL_STATE_IDLE) {
-            shift(pager!!.currentItem - MIDDLE_CHILD)
+            shift(pager.currentItem - MIDDLE_CHILD)
             pager.setCurrentItem(MIDDLE_CHILD, false)
         }
     }
 
     override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {}
     override fun onPageSelected(pos: Int) {}
-
-    companion object {
-        private const val CHILD_COUNT = 5
-        private const val MIDDLE_CHILD = CHILD_COUNT / 2
-    }
-
-    init {
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        for (i in 0 until CHILD_COUNT) {
-            childs[i] = layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView
-            adapters[i] = EventListAdapter()
-            childs[i]!!.adapter = adapters[i]
-        }
-    }
 }

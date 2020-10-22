@@ -6,13 +6,13 @@ import com.tisza.esemenynaptar.*
 object CategoryConverter {
     @JvmStatic
 	@TypeConverter
-    fun categoryFromString(str: String?): Category? {
-        return Category.fromStringID(str!!)
+    fun categoryFromString(str: String): Category {
+        return Category.fromStringID(str)
     }
 
     @JvmStatic
 	@TypeConverter
-    fun categoryToString(category: Category?): String? {
-        return category?.stringID
+    fun categoryToString(category: Category): String {
+        return category.stringID
     }
 }

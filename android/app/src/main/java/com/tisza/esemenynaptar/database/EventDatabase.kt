@@ -9,7 +9,7 @@ import java.io.*
 @Database(entities = [Event::class], version = 1, exportSchema = false)
 @TypeConverters(CategoryConverter::class)
 abstract class EventDatabase : RoomDatabase() {
-    abstract fun eventDao(): EventDao?
+    abstract fun eventDao(): EventDao
 
     companion object {
         private const val NAME = "event.db"
@@ -39,7 +39,7 @@ abstract class EventDatabase : RoomDatabase() {
                 }
             }).build()
             object : AsyncTask<Void?, Void?, Void?>() {
-                protected override fun doInBackground(vararg voids: Void): Void? {
+                override fun doInBackground(vararg p0: Void?): Void? {
                     try {
                         tempDatabase!!.query("SELECT 0", null)
                     } catch (e: Exception) {
@@ -55,10 +55,11 @@ abstract class EventDatabase : RoomDatabase() {
             dbPath.parentFile.mkdirs()
             try {
                 val input = context.assets.open(NAME)
-                val output: OutputStream = FileOutputStream(dbPath)
+                val output = FileOutputStream(dbPath)
                 val buffer = ByteArray(8192)
                 var length: Int
-                while (input.read(buffer, 0, 8192).also { length = it } > 0) output.write(buffer, 0, length)
+                while (input.read(buffer, 0, 8192).also { length = it } > 0)
+                    output.write(buffer, 0, length)
                 output.close()
                 input.close()
             } catch (e: IOException) {

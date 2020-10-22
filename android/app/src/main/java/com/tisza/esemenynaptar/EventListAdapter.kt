@@ -10,23 +10,24 @@ import androidx.lifecycle.*
 import com.tisza.esemenynaptar.database.*
 
 class EventListAdapter : BaseAdapter() {
-    private var events: LiveData<List<Event?>?>? = null
-    private var noEventsView: TextView? = null
-    private val observer = Observer { list: List<Event?>? -> notifyDataSetChanged() }
-    fun setEvents(newEvents: LiveData<List<Event?>?>?) {
-        if (events != null) events!!.removeObserver(observer)
+    private var events: LiveData<List<Event>>? = null
+    private lateinit var noEventsView: TextView
+    private val observer = Observer<List<Event>> { notifyDataSetChanged() }
+
+    fun setEvents(newEvents: LiveData<List<Event>>) {
+        events?.removeObserver(observer)
+        newEvents.observeForever(observer)
         events = newEvents
-        events!!.observeForever(observer)
     }
 
     private val currentEvents: List<Event>
-        private get() = if (events == null || events!!.value == null) emptyList() else events!!.getValue()
+        get() = events?.value ?: emptyList()
 
     override fun getCount(): Int {
         return Math.max(1, currentEvents.size)
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Any? {
         return null
     }
 
@@ -34,11 +35,13 @@ class EventListAdapter : BaseAdapter() {
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = LayoutInflater.from(parent.context)
         if (currentEvents.isEmpty()) {
-            if (noEventsView == null) noEventsView = inflater.inflate(R.layout.no_events_view, parent, false) as TextView
-            return noEventsView!!
+            if (!::noEventsView.isInitialized)
+                noEventsView = inflater.inflate(R.layout.no_events_view, parent, false) as TextView
+
+            return noEventsView
         }
         val view: View
         val viewHolder: ViewHolder
@@ -56,11 +59,11 @@ class EventListAdapter : BaseAdapter() {
             view.tag = viewHolder
         }
         val event = currentEvents[position]
-        viewHolder.iconView!!.setImageResource(event.category.imageRes)
-        viewHolder.categoryTextView!!.setText(event.category.displayNameRes)
-        viewHolder.textView!!.text = Html.fromHtml(event.text)
-        viewHolder.textView!!.movementMethod = LinkMovementMethod.getInstance()
-        viewHolder.shareButton!!.setOnClickListener { v: View ->
+        viewHolder.iconView.setImageResource(event.category.imageRes)
+        viewHolder.categoryTextView.setText(event.category.displayNameRes)
+        viewHolder.textView.text = Html.fromHtml(event.text)
+        viewHolder.textView.movementMethod = LinkMovementMethod.getInstance()
+        viewHolder.shareButton.setOnClickListener { v: View ->
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
             sendIntent.putExtra(Intent.EXTRA_TEXT, event.text)
@@ -69,7 +72,7 @@ class EventListAdapter : BaseAdapter() {
             v.context.startActivity(shareIntent)
         }
         viewHolder.likeButton.setAlpha(if (event.isLiked) 1 else 0.3f)
-        viewHolder.likeButton!!.setOnClickListener { v: View? ->
+        viewHolder.likeButton.setOnClickListener { v: View? ->
             object : AsyncTask<Void?, Void?, Void>() {
                 protected override fun doInBackground(vararg voids: Void): Void {
                     event.isLiked = !event.isLiked
@@ -82,10 +85,10 @@ class EventListAdapter : BaseAdapter() {
     }
 
     private class ViewHolder {
-        var iconView: ImageView? = null
-        var categoryTextView: TextView? = null
-        var textView: TextView? = null
-        var likeButton: ImageButton? = null
-        var shareButton: ImageButton? = null
+        lateinit var iconView: ImageView
+        lateinit var categoryTextView: TextView
+        lateinit var textView: TextView
+        lateinit var likeButton: ImageButton
+        lateinit var shareButton: ImageButton
     }
 }
