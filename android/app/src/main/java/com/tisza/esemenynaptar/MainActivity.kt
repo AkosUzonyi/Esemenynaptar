@@ -14,6 +14,15 @@ import com.tisza.esemenynaptar.database.*
 import java.text.*
 import java.util.*
 
+const val MILLIS_PER_DAY = 86400000
+val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+const val SHARED_PREF = "sp"
+const val SP_NOTIFICATIONS_ENABLED = "notifications_enabled"
+const val SP_NOTIFICATION_TIME = "notification_time"
+const val TODAY_EXTRA = "today"
+private const val SAVED_DATE = "date"
+private const val SAVING_DAY = "savingdate"
+
 class MainActivity : AppCompatActivity(), OnPageChangeListener {
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
@@ -27,15 +36,15 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
 
     private val nofificationTimeSetListener = OnTimeSetListener { view, hourOfDay, minute ->
         val editor = sharedPreferences.edit()
-        editor.putInt(NOTIFICATION_TIME, hourOfDay * 60 + minute)
+        editor.putInt(SP_NOTIFICATION_TIME, hourOfDay * 60 + minute)
         editor.commit()
-        DailyReceiver.schedule(this@MainActivity)
+        scheduleNotifications(this@MainActivity)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = layoutInflater
-        EventDatabase.init(this) { onDatabaseReady() }
+        initEventDatabase(this) { onDatabaseReady() }
         sharedPreferences = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -44,8 +53,8 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
         val today = savedDate.timeInMillis / MILLIS_PER_DAY
         if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
             savedDate.timeInMillis = savedInstanceState.getLong(SAVED_DATE)
-        DailyReceiver.createNotificationChannel(this)
-        DailyReceiver.schedule(this)
+        createNotificationChannel(this)
+        scheduleNotifications(this)
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancelAll()
     }
@@ -55,8 +64,6 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
         pager.setOnPageChangeListener(this)
         pagerAdapter = MyPagerAdapter(this, pager)
         pager.adapter = pagerAdapter
-        val calendar = Calendar.getInstance()
-        val today = calendar.timeInMillis / MILLIS_PER_DAY
         pagerAdapter.date = savedDate
     }
 
@@ -76,7 +83,7 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        menu.findItem(R.id.enable_notification).isChecked = sharedPreferences.getBoolean(NOTIFICATIONS_ENABLED, true)
+        menu.findItem(R.id.enable_notification).isChecked = sharedPreferences.getBoolean(SP_NOTIFICATIONS_ENABLED, true)
         return true
     }
 
@@ -103,13 +110,13 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
                 val enable = !item.isChecked
                 item.isChecked = enable
                 val editor = sharedPreferences.edit()
-                editor.putBoolean(NOTIFICATIONS_ENABLED, enable)
+                editor.putBoolean(SP_NOTIFICATIONS_ENABLED, enable)
                 editor.commit()
                 supportInvalidateOptionsMenu()
                 true
             }
             R.id.set_notification_time -> {
-                val time = sharedPreferences.getInt(NOTIFICATION_TIME, 420)
+                val time = sharedPreferences.getInt(SP_NOTIFICATION_TIME, 420)
                 val timeDialog = TimePickerDialog(this, nofificationTimeSetListener, time / 60, time % 60, true)
                 timeDialog.show()
                 true
@@ -128,16 +135,5 @@ class MainActivity : AppCompatActivity(), OnPageChangeListener {
 
     override fun onPageSelected(page: Int) {
         pagerAdapter.onPageSelected(page)
-    }
-
-    companion object {
-        const val MILLIS_PER_DAY = 86400000
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        const val SHARED_PREF = "sp"
-        const val NOTIFICATIONS_ENABLED = "notifications_enabled"
-        const val NOTIFICATION_TIME = "notification_time"
-        const val TODAY_EXTRA = "today"
-        private const val SAVED_DATE = "date"
-        private const val SAVING_DAY = "savingdate"
     }
 }

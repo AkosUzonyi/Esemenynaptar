@@ -47,7 +47,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     private fun loadDataForChild(childPos: Int) {
         val cal = date.clone() as Calendar
         cal.add(Calendar.DAY_OF_MONTH, childPos - MIDDLE_CHILD)
-        adapters[childPos].setEvents(EventDatabase.instance.eventDao().getEventsForDate(cal))
+        adapters[childPos].setEvents(eventDatabase.eventDao().getEventsForDate(cal))
         childs[childPos].setSelection(0)
     }
 
@@ -66,7 +66,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     override fun getPageTitle(position: Int): CharSequence? {
         val c = date.clone() as Calendar
         c.add(Calendar.DAY_OF_MONTH, position - MIDDLE_CHILD)
-        return MainActivity.dateFormat.format(c.time)
+        return dateFormat.format(c.time)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

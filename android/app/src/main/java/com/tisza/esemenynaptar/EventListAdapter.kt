@@ -24,7 +24,7 @@ class EventListAdapter : BaseAdapter() {
         get() = events?.value ?: emptyList()
 
     override fun getCount(): Int {
-        return Math.max(1, currentEvents.size)
+        return currentEvents.size.coerceAtLeast(1)
     }
 
     override fun getItem(position: Int): Any? {
@@ -76,7 +76,7 @@ class EventListAdapter : BaseAdapter() {
             object : AsyncTask<Unit, Unit, Unit>() {
                 override fun doInBackground(vararg p0: Unit) {
                     event.isLiked = !event.isLiked
-                    EventDatabase.instance.eventDao().updateEvent(event)
+                    eventDatabase.eventDao().updateEvent(event)
                 }
             }.execute()
         }
