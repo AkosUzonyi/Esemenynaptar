@@ -23,6 +23,8 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     private val adapters: Array<EventListAdapter>
 
     init {
+        pager.setOnPageChangeListener(this)
+
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         childs = Array(5) {
             layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView

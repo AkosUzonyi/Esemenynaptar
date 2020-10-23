@@ -11,7 +11,7 @@ import java.util.*
 private const val SAVED_DATE = "date"
 private const val SAVING_DAY = "savingdate"
 
-class CalendarFragment : Fragment(), ViewPager.OnPageChangeListener {
+class CalendarFragment : Fragment() {
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -39,7 +39,6 @@ class CalendarFragment : Fragment(), ViewPager.OnPageChangeListener {
             savedDate.timeInMillis = savedInstanceState.getLong(SAVED_DATE)
 
         pager = view.findViewById(R.id.pager)
-        pager.setOnPageChangeListener(this)
         pagerAdapter = MyPagerAdapter(requireContext(), pager)
         pager.adapter = pagerAdapter
         pagerAdapter.date = savedDate
@@ -88,17 +87,5 @@ class CalendarFragment : Fragment(), ViewPager.OnPageChangeListener {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-        pagerAdapter.onPageScrollStateChanged(state)
-    }
-
-    override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
-        pagerAdapter.onPageScrolled(arg0, arg1, arg2)
-    }
-
-    override fun onPageSelected(page: Int) {
-        pagerAdapter.onPageSelected(page)
     }
 }
