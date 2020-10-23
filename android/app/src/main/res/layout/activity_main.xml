@@ -14,22 +14,13 @@
 	    android:minHeight="?attr/actionBarSize"
 	    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
 	/>
-    
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-	    android:padding="10dp"
-    >
-    	<androidx.viewpager.widget.PagerTabStrip
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="top"
-			android:textColor="#A00000"
-			android:textSize="20sp"
-			android:paddingBottom="5dp"
-			/>
-    </androidx.viewpager.widget.ViewPager>
-    
+
+	<FrameLayout
+		android:id="@+id/main_frame"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/toolbar"
+		android:padding="10dp"
+	/>
+
 </RelativeLayout>
