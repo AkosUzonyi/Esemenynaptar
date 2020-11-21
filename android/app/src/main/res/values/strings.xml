@@ -17,5 +17,6 @@
     <string name="pick_date">Dátum módosítása</string>
     <string name="set_notification_time">Értesítés időpontja...</string>
     <string name="enable_notification">Napi értesítések</string>
-    
+
+    <string name="no_favorites">A kedvencek listája üres</string>
 </resources>

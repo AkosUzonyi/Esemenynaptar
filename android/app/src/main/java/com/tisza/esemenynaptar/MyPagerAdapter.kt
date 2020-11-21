@@ -30,7 +30,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
             layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView
         }
         adapters = Array(5) {
-            EventListAdapter()
+            EventListAdapter(context, R.layout.event_view, R.layout.no_events_view)
         }
 
         for (i in 0 until CHILD_COUNT) {
@@ -49,7 +49,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     private fun loadDataForChild(childPos: Int) {
         val cal = date.clone() as Calendar
         cal.add(Calendar.DAY_OF_MONTH, childPos - MIDDLE_CHILD)
-        adapters[childPos].setEvents(eventDatabase.eventDao().getEventsForDate(cal))
+        adapters[childPos].events = eventDatabase.eventDao().getEventsForDate(cal)
         children[childPos].setSelection(0)
     }
 

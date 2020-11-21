@@ -10,7 +10,7 @@ import java.util.*
 
 private const val SAVED_DATE = "date"
 
-class CalendarFragment : Fragment() {
+class CalendarFragment(val initialDate: Calendar) : Fragment() {
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -32,14 +32,18 @@ class CalendarFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         setHasOptionsMenu(true)
 
-        val savedDate = Calendar.getInstance()
-        if (savedInstanceState != null)
-            savedDate.timeInMillis = savedInstanceState.getLong(SAVED_DATE)
+        val date = if (savedInstanceState == null) {
+            initialDate
+        } else {
+            Calendar.getInstance().apply {
+                timeInMillis = savedInstanceState.getLong(SAVED_DATE)
+            }
+        }
 
         pager = view.findViewById(R.id.pager)
         pagerAdapter = MyPagerAdapter(requireContext(), pager)
         pager.adapter = pagerAdapter
-        pagerAdapter.date = savedDate
+        pagerAdapter.date = date
         return view
     }
 

@@ -36,7 +36,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDatabaseReady() {
-        supportFragmentManager.beginTransaction().replace(R.id.main_frame, CalendarFragment()).commit()
+        val today = Calendar.getInstance()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame, CalendarFragment(today))
+                .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

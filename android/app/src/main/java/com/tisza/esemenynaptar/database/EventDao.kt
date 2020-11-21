@@ -9,6 +9,9 @@ interface EventDao {
     @Query("SELECT * FROM event WHERE year = :year AND month = :month AND day = :day")
     fun getEventsForDate(year: Int, month: Int, day: Int): LiveData<List<Event>>
 
+    @Query("SELECT * FROM event WHERE isLiked ORDER BY year, month, day")
+    fun getLikedEvents(): LiveData<List<Event>>
+
     @Update
     fun updateEvent(event: Event?)
 }

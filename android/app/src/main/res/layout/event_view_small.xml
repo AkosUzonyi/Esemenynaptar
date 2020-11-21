@@ -18,11 +18,9 @@
         <ImageView
             android:id="@+id/event_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/event_category_text"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
@@ -32,18 +30,23 @@
             android:id="@+id/event_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:padding="5dp"
+            android:layout_toRightOf="@id/event_icon"
+            android:layout_marginLeft="5dp"
+            android:layout_alignTop="@id/event_icon"
             android:textStyle="bold"
-            android:textSize="24dp"
+            android:textColor="#000000"
+            android:textSize="18dp"
         />
 
         <TextView
             android:id="@+id/event_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_alignLeft="@id/event_category_text"
+            android:layout_below="@id/event_category_text"
+            android:textStyle="italic"
+            android:textColor="#404040"
+            android:textSize="12dp"
         />
 
         <ImageButton
@@ -51,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@id/event_category_text"
+            android:layout_alignBottom="@id/event_icon"
             android:layout_toLeftOf="@id/event_share"
             android:layout_marginRight="5dp"
             android:adjustViewBounds="true"
@@ -64,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@id/event_category_text"
+            android:layout_alignBottom="@id/event_icon"
             android:layout_alignParentRight="true"
             android:adjustViewBounds="true"
             android:src="@android:drawable/ic_menu_share"
@@ -74,11 +77,11 @@
         <TextView
             android:id="@+id/event_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/event_category_text"
-            android:textSize="15sp"
+            android:layout_height="40dp"
+            android:layout_below="@id/event_icon"
+            android:textSize="12sp"
             android:textColor="#000000"
-            android:linksClickable="true"
+            android:ellipsize="end"
             />
 
     </RelativeLayout>

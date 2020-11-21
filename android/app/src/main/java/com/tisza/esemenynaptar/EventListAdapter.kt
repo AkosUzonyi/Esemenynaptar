@@ -9,16 +9,19 @@ import android.widget.*
 import androidx.lifecycle.*
 import com.tisza.esemenynaptar.database.*
 
-class EventListAdapter : BaseAdapter() {
-    private var events: LiveData<List<Event>>? = null
-    private lateinit var noEventsView: TextView
+class EventListAdapter(private val context: Context, private val eventRes: Int, private val noEventRes: Int) : BaseAdapter() {
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private val noEventsView = inflater.inflate(noEventRes, null, false)
     private val observer = Observer<List<Event>> { notifyDataSetChanged() }
 
-    fun setEvents(newEvents: LiveData<List<Event>>) {
-        events?.removeObserver(observer)
-        newEvents.observeForever(observer)
-        events = newEvents
-    }
+    var events: LiveData<List<Event>>? = null
+        set(value) {
+            field?.removeObserver(observer)
+            field = value
+            field?.observeForever(observer)
+        }
+
+    var onEventClickedListener: ((Event) -> Unit)? = null
 
     private val currentEvents: List<Event>
         get() = events?.value ?: emptyList()
@@ -36,33 +39,35 @@ class EventListAdapter : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = LayoutInflater.from(parent.context)
-        if (currentEvents.isEmpty()) {
-            if (!::noEventsView.isInitialized)
-                noEventsView = inflater.inflate(R.layout.no_events_view, parent, false) as TextView
-
+        if (currentEvents.isEmpty())
             return noEventsView
-        }
+
         val view: View
         val viewHolder: ViewHolder
         if (convertView != null && convertView !== noEventsView) {
             view = convertView
             viewHolder = convertView.tag as ViewHolder
         } else {
-            view = inflater.inflate(R.layout.event_view, parent, false)
+            view = inflater.inflate(eventRes, parent, false)
             viewHolder = ViewHolder()
             viewHolder.categoryTextView = view.findViewById(R.id.event_category_text)
             viewHolder.iconView = view.findViewById(R.id.event_icon)
+            viewHolder.dateTextView = view.findViewById(R.id.event_date)
             viewHolder.textView = view.findViewById(R.id.event_text)
             viewHolder.shareButton = view.findViewById(R.id.event_share)
             viewHolder.likeButton = view.findViewById(R.id.event_like)
             view.tag = viewHolder
         }
         val event = currentEvents[position]
+
+        view.setOnClickListener {
+            onEventClickedListener?.invoke(event)
+        }
         viewHolder.iconView.setImageResource(event.category.imageRes)
         viewHolder.categoryTextView.setText(event.category.displayNameRes)
+        viewHolder.dateTextView.text = dateFormat.format(event.calendar.time)
         viewHolder.textView.text = Html.fromHtml(event.text)
-        viewHolder.textView.movementMethod = LinkMovementMethod.getInstance()
+        viewHolder.textView.movementMethod = if (onEventClickedListener == null) LinkMovementMethod.getInstance() else null
         viewHolder.shareButton.setOnClickListener { v: View ->
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
@@ -86,6 +91,7 @@ class EventListAdapter : BaseAdapter() {
     private class ViewHolder {
         lateinit var iconView: ImageView
         lateinit var categoryTextView: TextView
+        lateinit var dateTextView: TextView
         lateinit var textView: TextView
         lateinit var likeButton: ImageButton
         lateinit var shareButton: ImageButton
