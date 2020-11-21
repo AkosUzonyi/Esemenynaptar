@@ -9,7 +9,6 @@ import androidx.viewpager.widget.*
 import java.util.*
 
 private const val SAVED_DATE = "date"
-private const val SAVING_DAY = "savingdate"
 
 class CalendarFragment : Fragment() {
     private lateinit var pager: ViewPager
@@ -34,8 +33,7 @@ class CalendarFragment : Fragment() {
         setHasOptionsMenu(true)
 
         val savedDate = Calendar.getInstance()
-        val today = savedDate.timeInMillis / MILLIS_PER_DAY
-        if (savedInstanceState != null && savedInstanceState.getLong(SAVING_DAY) == today)
+        if (savedInstanceState != null)
             savedDate.timeInMillis = savedInstanceState.getLong(SAVED_DATE)
 
         pager = view.findViewById(R.id.pager)
@@ -49,7 +47,6 @@ class CalendarFragment : Fragment() {
         super.onSaveInstanceState(bundle)
         val now = Calendar.getInstance()
         bundle.putLong(SAVED_DATE, pagerAdapter.date.timeInMillis)
-        bundle.putLong(SAVING_DAY, now.timeInMillis / MILLIS_PER_DAY)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
