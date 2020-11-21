@@ -71,8 +71,8 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
         return dateFormat.format(c.time)
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
+    override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
+        container.removeView(item as View)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
