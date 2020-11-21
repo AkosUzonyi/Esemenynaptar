@@ -19,14 +19,14 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
             setDate(value[Calendar.YEAR], value[Calendar.MONTH], value[Calendar.DAY_OF_MONTH])
         }
 
-    private val childs: Array<ListView>
+    private val children: Array<ListView>
     private val adapters: Array<EventListAdapter>
 
     init {
         pager.setOnPageChangeListener(this)
 
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        childs = Array(5) {
+        children = Array(5) {
             layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView
         }
         adapters = Array(5) {
@@ -34,7 +34,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
         }
 
         for (i in 0 until CHILD_COUNT) {
-            childs[i].adapter = adapters[i]
+            children[i].adapter = adapters[i]
         }
     }
 
@@ -50,7 +50,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
         val cal = date.clone() as Calendar
         cal.add(Calendar.DAY_OF_MONTH, childPos - MIDDLE_CHILD)
         adapters[childPos].setEvents(eventDatabase.eventDao().getEventsForDate(cal))
-        childs[childPos].setSelection(0)
+        children[childPos].setSelection(0)
     }
 
     private fun shift(diff: Int) {
@@ -60,7 +60,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
         val oldAdapters = adapters.clone()
         for (i in 0 until CHILD_COUNT) {
             adapters[i] = oldAdapters[(i + diff + CHILD_COUNT) % CHILD_COUNT]
-            childs[i].adapter = adapters[i]
+            children[i].adapter = adapters[i]
             if (i + diff < 0 || i + diff >= CHILD_COUNT) loadDataForChild(i)
         }
     }
@@ -76,7 +76,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val v = childs[position]
+        val v = children[position]
         container.addView(v)
         return v
     }
