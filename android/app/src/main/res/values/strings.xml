@@ -19,4 +19,7 @@
     <string name="enable_notification">Napi értesítések</string>
 
     <string name="no_favorites">A kedvencek listája üres</string>
+    <string name="menu_settings">Beállítások</string>
+    <string name="menu_favorites">Kedvencek</string>
+    <string name="menu_calendar">Naptár</string>
 </resources>

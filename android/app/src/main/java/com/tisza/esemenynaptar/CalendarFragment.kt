@@ -10,10 +10,12 @@ import java.util.*
 
 private const val SAVED_DATE = "date"
 
-class CalendarFragment(val initialDate: Calendar) : Fragment() {
+class CalendarFragment(private val initialDate: Calendar) : Fragment() {
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
     private lateinit var sharedPreferences: SharedPreferences
+
+    constructor() : this(Calendar.getInstance())
 
     private val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
         pagerAdapter.setDate(year, monthOfYear, dayOfMonth)

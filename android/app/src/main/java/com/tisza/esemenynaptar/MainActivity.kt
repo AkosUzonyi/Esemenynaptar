@@ -5,8 +5,9 @@ import android.content.*
 import android.os.*
 import android.view.*
 import androidx.appcompat.app.*
-import androidx.appcompat.widget.*
+import androidx.core.view.*
 import com.tisza.esemenynaptar.database.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.text.*
 import java.util.*
 
@@ -27,18 +28,37 @@ class MainActivity : AppCompatActivity() {
         initEventDatabase(this) { onDatabaseReady() }
         sharedPreferences = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
+        navigation_view.setNavigationItemSelectedListener(this::onMenuItemSelected)
         createNotificationChannel(this)
         scheduleNotifications(this)
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancelAll()
     }
 
-    private fun onDatabaseReady() {
-        val today = Calendar.getInstance()
+    private fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        val fragment = when (menuItem.itemId) {
+            R.id.nav_calendar -> CalendarFragment()
+            R.id.nav_favorites -> FavoritesFragment()
+            else -> CalendarFragment() //TODO
+        }
+
         supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frame, CalendarFragment(today))
+                .replace(R.id.main_frame, fragment)
+                .commit()
+
+        menuItem.isChecked = true
+        title = menuItem.title
+        drawer.closeDrawers()
+
+        return true
+    }
+
+    private fun onDatabaseReady() {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame, CalendarFragment())
                 .commit()
     }
 
@@ -46,6 +66,16 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu, menu)
         menu.findItem(R.id.enable_notification).isChecked = sharedPreferences.getBoolean(SP_NOTIFICATIONS_ENABLED, true)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                drawer.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
