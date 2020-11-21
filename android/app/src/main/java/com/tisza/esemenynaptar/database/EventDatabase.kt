@@ -40,14 +40,13 @@ fun initEventDatabase(context: Context, onReady: () -> Unit) {
             super.onOpen(db)
         }
     }).build()
-    object : AsyncTask<Void?, Void?, Void?>() {
-        override fun doInBackground(vararg p0: Void?): Void? {
+    object : AsyncTask<Unit, Unit, Unit>() {
+        override fun doInBackground(vararg args: Unit) {
             try {
                 tempDatabase!!.query("SELECT 0", null)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            return null
         }
     }.execute()
 }
