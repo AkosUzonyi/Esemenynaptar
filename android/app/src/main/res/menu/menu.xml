@@ -4,8 +4,9 @@
     <item
 	    android:id="@+id/today"
 	    android:title="@string/today"
+	    android:icon="@android:drawable/ic_menu_revert"
 	    android:orderInCategory="2"
-	    app:showAsAction="never"
+	    app:showAsAction="ifRoom"
     />
     <item
 	    android:id="@+id/pick_date"
@@ -13,20 +14,5 @@
 	    android:icon="@android:drawable/ic_menu_month"
 	    android:orderInCategory="1"
 	    app:showAsAction="ifRoom"
-    />
-    <group android:checkableBehavior="all">
-    <item
-	    android:id="@+id/enable_notification"
-	    android:title="@string/enable_notification"
-	    android:orderInCategory="3"
-	    app:showAsAction="never"
-	    android:checkable="true"
-    />
-    </group>
-    <item
-	    android:id="@+id/set_notification_time"
-	    android:title="@string/set_notification_time"
-	    android:orderInCategory="4"
-	    app:showAsAction="never"
     />
 </menu>

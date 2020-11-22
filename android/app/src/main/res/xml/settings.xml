@@ -1,0 +1,20 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+    app:title="@string/settings"
+    >
+
+    <SwitchPreferenceCompat
+        app:key="enable_notifications"
+        app:title="@string/enable_notification"
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+    />
+
+    <com.tisza.esemenynaptar.TimePreference
+        app:key="notification_time"
+        app:title="@string/notification_time"
+        android:dependency="enable_notifications"
+        app:iconSpaceReserved="false"
+        app:allowDividerBelow="true"
+    />
+</PreferenceScreen>

@@ -1,7 +1,6 @@
 package com.tisza.esemenynaptar
 
 import android.app.*
-import android.content.*
 import android.os.*
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ private const val SAVED_DATE = "date"
 class CalendarFragment(private val initialDate: Calendar) : Fragment() {
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
-    private lateinit var sharedPreferences: SharedPreferences
 
     constructor() : this(Calendar.getInstance())
 
@@ -21,17 +19,9 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
         pagerAdapter.setDate(year, monthOfYear, dayOfMonth)
     }
 
-    private val nofificationTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        val editor = sharedPreferences.edit()
-        editor.putInt(SP_NOTIFICATION_TIME, hourOfDay * 60 + minute)
-        editor.commit()
-        scheduleNotifications(requireContext())
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.calendar_fragment, container, false)
 
-        sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         setHasOptionsMenu(true)
 
         val date = if (savedInstanceState == null) {
@@ -55,10 +45,8 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
         bundle.putLong(SAVED_DATE, pagerAdapter.date.timeInMillis)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val setTimeItem = menu.findItem(R.id.set_notification_time)
-        val enableNotificationItem = menu.findItem(R.id.enable_notification)
-        setTimeItem.isEnabled = enableNotificationItem.isChecked
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -71,21 +59,6 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
                 val date = pagerAdapter.date
                 val dateDialog = DatePickerDialog(requireContext(), dateSetListener, date[Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
                 dateDialog.show()
-                true
-            }
-            R.id.enable_notification -> {
-                val enable = !item.isChecked
-                item.isChecked = enable
-                val editor = sharedPreferences.edit()
-                editor.putBoolean(SP_NOTIFICATIONS_ENABLED, enable)
-                editor.commit()
-                requireActivity().supportInvalidateOptionsMenu()
-                true
-            }
-            R.id.set_notification_time -> {
-                val time = sharedPreferences.getInt(SP_NOTIFICATION_TIME, 420)
-                val timeDialog = TimePickerDialog(requireContext(), nofificationTimeSetListener, time / 60, time % 60, true)
-                timeDialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

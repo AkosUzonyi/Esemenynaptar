@@ -13,20 +13,12 @@ import java.util.*
 
 const val MILLIS_PER_DAY = 86400000
 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-const val SHARED_PREF = "sp"
-const val SP_NOTIFICATIONS_ENABLED = "notifications_enabled"
-const val SP_NOTIFICATION_TIME = "notification_time"
 const val TODAY_EXTRA = "today"
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var inflater: LayoutInflater
-    private lateinit var sharedPreferences: SharedPreferences
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inflater = layoutInflater
         initEventDatabase(this) { onDatabaseReady() }
-        sharedPreferences = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -42,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         val fragment = when (menuItem.itemId) {
             R.id.nav_calendar -> CalendarFragment()
             R.id.nav_favorites -> FavoritesFragment()
-            else -> CalendarFragment() //TODO
+            R.id.nav_settings -> SettingsFragment()
+            else -> throw RuntimeException("invalid menu item id")
         }
 
         supportFragmentManager.beginTransaction()
@@ -60,12 +53,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frame, CalendarFragment())
                 .commit()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        menu.findItem(R.id.enable_notification).isChecked = sharedPreferences.getBoolean(SP_NOTIFICATIONS_ENABLED, true)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

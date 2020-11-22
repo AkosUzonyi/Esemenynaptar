@@ -6,6 +6,7 @@ import android.os.*
 import android.text.*
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import androidx.preference.*
 import com.tisza.esemenynaptar.database.*
 import java.util.*
 
@@ -13,8 +14,7 @@ private const val NOTIFICATION_CHANNEL_ID = "event"
 private const val NOTIFICATION_GROUP = "event"
 
 fun scheduleNotifications(context: Context) {
-    val sp = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val time = sp.getInt(SP_NOTIFICATION_TIME, 420)
+    val time = PreferenceManager.getDefaultSharedPreferences(context).getInt("notification_time", 420)
     val calendar = Calendar.getInstance()
     calendar[Calendar.HOUR_OF_DAY] = 0
     calendar[Calendar.MINUTE] = 0
@@ -38,7 +38,9 @@ fun createNotificationChannel(context: Context) {
 
 class DailyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (!context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getBoolean(SP_NOTIFICATIONS_ENABLED, true)) return
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean("enable_notifications", true))
+            return
+
         val calendar = Calendar.getInstance()
         initEventDatabase(context) {
             val eventsLiveData = eventDatabase.eventDao().getEventsForDate(calendar)
