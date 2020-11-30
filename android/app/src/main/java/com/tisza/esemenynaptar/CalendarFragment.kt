@@ -3,12 +3,13 @@ package com.tisza.esemenynaptar
 import android.app.*
 import android.os.*
 import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.*
 import java.util.*
 
 
-class CalendarFragment(private val initialDate: Calendar) : Fragment() {
+class CalendarFragment(private val initialDate: Calendar) : Fragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         private const val SI_SAVED_DATE = "date"
         private const val SI_SAVING_DATE = "savingdate"
@@ -18,10 +19,6 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
     private lateinit var pagerAdapter: MyPagerAdapter
 
     constructor() : this(Calendar.getInstance())
-
-    private val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-        pagerAdapter.setDate(year, monthOfYear, dayOfMonth)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.calendar_fragment, container, false)
@@ -67,11 +64,15 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
             }
             R.id.pick_date -> {
                 val date = pagerAdapter.date
-                val dateDialog = DatePickerDialog(requireContext(), dateSetListener, date[Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
+                val dateDialog = DatePickerDialog(requireContext(), this, date[Calendar.YEAR], date[Calendar.MONTH], date[Calendar.DAY_OF_MONTH])
                 dateDialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        pagerAdapter.setDate(year, monthOfYear, dayOfMonth)
     }
 }
