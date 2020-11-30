@@ -7,9 +7,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.*
 import java.util.*
 
-private const val SAVED_DATE = "date"
 
 class CalendarFragment(private val initialDate: Calendar) : Fragment() {
+    companion object {
+        private const val SI_SAVED_DATE = "date"
+        private const val SI_SAVING_DATE = "savingdate"
+    }
+
     private lateinit var pager: ViewPager
     private lateinit var pagerAdapter: MyPagerAdapter
 
@@ -24,25 +28,31 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val date = if (savedInstanceState == null) {
-            initialDate
-        } else {
-            Calendar.getInstance().apply {
-                timeInMillis = savedInstanceState.getLong(SAVED_DATE)
-            }
-        }
-
         pager = view.findViewById(R.id.pager)
         pagerAdapter = MyPagerAdapter(requireContext(), pager)
         pager.adapter = pagerAdapter
-        pagerAdapter.date = date
+        pagerAdapter.date = getRestoredDate(savedInstanceState)
         return view
+    }
+
+    private fun getRestoredDate(savedInstanceState: Bundle?) : Calendar {
+        if (savedInstanceState == null)
+            return initialDate
+
+        val today = Calendar.getInstance().timeInMillis / MILLIS_PER_DAY
+        val savedDay = savedInstanceState.getLong(SI_SAVING_DATE) / MILLIS_PER_DAY
+        if (today != savedDay)
+            return initialDate
+
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = savedInstanceState.getLong(SI_SAVED_DATE)
+        return cal
     }
 
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-        val now = Calendar.getInstance()
-        bundle.putLong(SAVED_DATE, pagerAdapter.date.timeInMillis)
+        bundle.putLong(SI_SAVED_DATE, pagerAdapter.date.timeInMillis)
+        bundle.putLong(SI_SAVING_DATE, Calendar.getInstance().timeInMillis)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
