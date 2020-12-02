@@ -41,11 +41,9 @@ class DailyReceiver : BroadcastReceiver() {
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean("enable_notifications", true))
             return
 
-        val calendar = Calendar.getInstance()
-        initEventDatabase(context) {
-            val eventsLiveData = eventDatabase.eventDao().getEventsForDate(calendar)
-            eventsLiveData.observeForever(EventObserver(context, eventsLiveData))
-        }
+        initEventDatabase(context)
+        val eventsLiveData = eventDatabase.eventDao().getEventsForDate(Calendar.getInstance())
+        eventsLiveData.observeForever(EventObserver(context, eventsLiveData))
     }
 }
 

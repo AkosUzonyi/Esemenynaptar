@@ -18,7 +18,7 @@ const val TODAY_EXTRA = "today"
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initEventDatabase(this) { onDatabaseReady() }
+        initEventDatabase(this)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         scheduleNotifications(this)
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancelAll()
+
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame, CalendarFragment())
+                .commit()
     }
 
     private fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -47,12 +51,6 @@ class MainActivity : AppCompatActivity() {
         drawer.closeDrawers()
 
         return true
-    }
-
-    private fun onDatabaseReady() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frame, CalendarFragment())
-                .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
