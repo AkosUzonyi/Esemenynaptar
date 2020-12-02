@@ -16,7 +16,7 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment(), DatePick
     }
 
     private lateinit var pager: ViewPager
-    private lateinit var pagerAdapter: MyPagerAdapter
+    private lateinit var pagerAdapter: CalendarPagerAdapter
 
     constructor() : this(Calendar.getInstance())
 
@@ -26,7 +26,7 @@ class CalendarFragment(private val initialDate: Calendar) : Fragment(), DatePick
         setHasOptionsMenu(true)
 
         pager = view.findViewById(R.id.pager)
-        pagerAdapter = MyPagerAdapter(requireContext(), pager)
+        pagerAdapter = CalendarPagerAdapter(requireContext(), pager)
         pager.adapter = pagerAdapter
         pagerAdapter.date = getRestoredDate(savedInstanceState)
         return view

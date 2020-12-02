@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager.*
 import com.tisza.esemenynaptar.database.*
 import java.util.*
 
-class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdapter(), OnPageChangeListener {
+class CalendarPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdapter(), OnPageChangeListener {
     companion object {
         private const val CHILD_COUNT = 5
         private const val MIDDLE_CHILD = CHILD_COUNT / 2
