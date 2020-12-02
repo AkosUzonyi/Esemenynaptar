@@ -21,8 +21,8 @@ class FavoritesFragment : Fragment() {
                     .commit()
         }
 
-        val view = inflater.inflate(R.layout.favorites_fragment, container, false)
-        (view as ListView).adapter = eventListAdapter
+        val view = inflater.inflate(R.layout.favorites_fragment, container, false) as ListView
+        view.adapter = eventListAdapter
         return view
     }
 }

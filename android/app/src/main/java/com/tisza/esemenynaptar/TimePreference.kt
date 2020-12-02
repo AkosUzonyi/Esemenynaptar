@@ -1,6 +1,5 @@
 package com.tisza.esemenynaptar
 
-import android.R
 import android.content.*
 import android.util.*
 import androidx.preference.*

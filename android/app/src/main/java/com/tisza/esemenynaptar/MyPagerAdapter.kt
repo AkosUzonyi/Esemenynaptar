@@ -26,10 +26,10 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
         pager.setOnPageChangeListener(this)
 
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        children = Array(5) {
+        children = Array(CHILD_COUNT) {
             layoutInflater.inflate(R.layout.event_list_view, pager, false) as ListView
         }
-        adapters = Array(5) {
+        adapters = Array(CHILD_COUNT) {
             EventListAdapter(context, R.layout.event_view, R.layout.no_events_view)
         }
 
@@ -39,7 +39,7 @@ class MyPagerAdapter(context: Context, private val pager: ViewPager) : PagerAdap
     }
 
     fun setDate(year: Int, month: Int, day: Int) {
-        date[year, month] = day
+        date.set(year, month, day)
         for (i in 0 until CHILD_COUNT)
             loadDataForChild(i)
         pager.setCurrentItem(MIDDLE_CHILD, false)
