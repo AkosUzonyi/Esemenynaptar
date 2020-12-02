@@ -66,7 +66,9 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (intent.getBooleanExtra(TODAY_EXTRA, false)) {
-            //pagerAdapter.date = Calendar.getInstance()
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frame, CalendarFragment())
+                    .commit()
         }
     }
 }
