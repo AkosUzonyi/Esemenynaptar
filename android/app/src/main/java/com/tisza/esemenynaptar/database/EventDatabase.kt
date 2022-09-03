@@ -9,7 +9,7 @@ import java.io.*
 
 private const val EVENT_DATABASE_NAME = "event.db"
 private const val EVENT_DATABASE_SRC_NAME = "event_src.db"
-private const val VERSION = 2
+private const val VERSION = 3
 
 lateinit var eventDatabase: EventDatabase
     private set
