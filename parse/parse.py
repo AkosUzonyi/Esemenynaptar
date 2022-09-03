@@ -10,7 +10,7 @@ months = ["Január", "Február", "Március", "Április", "Május", "Június", "J
 
 year_regexp = re.compile(r"(20\d{2})\.?")
 month_regexp = re.compile(r"(" + "|".join(months) + ")")
-day_regexp = re.compile(r"(\d+)\. *?\t(.*)")
+day_regexp = re.compile(r"(?:    )?(\d+)\.(?:\s)*?(.*)")
 uri_regexp = re.compile(r"http\S*")
 uri_www_regexp = re.compile(r"(?<!/)www\S*")
 italic_regexp = re.compile(r"„.*?”(.{,3}\(.*?\))?")
