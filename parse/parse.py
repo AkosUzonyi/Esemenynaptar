@@ -108,7 +108,7 @@ with open(srcFile, "r", encoding="utf-8") as file, sqlite3.connect(databaseFile)
 		text += line + "<br>"
 
 		#we don't need the ending of the document (table of contents)
-		if semesterPos >= 0 and text.endswith("<br>" * 5):
+		if semesterPos >= 0 and text.endswith("<br>" * 7):
 			skipped = file.read()
 
 	writeRecord()
